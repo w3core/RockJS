@@ -49,6 +49,17 @@
    $R.bootProgress.show();
   }
 
+ // [script type="text/template" id="{id}"] {template} [/script]
+ function getTemplate (id, DOM) {
+   var DOM = DOM && typeof DOM == OBJECT ? DOM : document, url = $R.config.client.url;
+   if (typeof id == STRING) {
+     if (id.indexOf($R.config.client.url) == 0) var id = id.substr(url.length);
+     var mask = 'script[type="text/template"][id="%s"]';
+     var node = DOM.querySelector(mask.replace('%s', id));
+     if (node) return node.innerHTML.trim();
+   }
+ }
+
  /*[include src="generic/log.js"]*/
  /*[include src="generic/error.js"]*/
  /*[include src="generic/includers.js"]*/
@@ -153,7 +164,7 @@
 
  function initTools ()
   {
-   var onToolsLoad = function onToolsLoad (){
+   var onToolsLoad = function onToolsLoad () {
     $R.tools.makeCSSNodeByString = makeCSSNodeByString;
     $R.dispatchEvent ('initTools');
     $R.bootProgress.doStep('initTools').setMessage('System tools loaded');

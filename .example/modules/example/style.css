@@ -8,4 +8,4 @@
  * #this {background: url("./some_image.gif");}
  * .module-example {background: url("modules/example/some_image.gif");}
  */
-#this {position:absolute; top:50%; left:0; width:100%; margin-top:-50px; font-family:monospace; font-size:3em; text-align:center;}
+#this {}

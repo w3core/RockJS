@@ -3,25 +3,6 @@ include "jshrink.class.php";
 
 class minify {
 
-/*
-  public static function js ($string="") {
-    if (empty($string) || !is_string($string)) return "";
-    $filename = tempnam(sys_get_temp_dir(), "js_");
-    @chmod($filename, 0777);
-    $file = fopen($filename, "w");
-    fwrite($file, $string);
-    fclose($file);
-    $cmd = "java -jar yuicompressor.jar --type js $filename";
-    $cwd = getcwd();
-    chdir(dirname(__FILE__));
-    exec($cmd, $output, $status);
-    chdir($cwd);
-    unlink($filename);
-    $result = ($status == 0) ? implode($output) : $string;
-    return $result;
-  }
-*/
-
   public static function js ($string="") {
     try {
       $result = \JShrink\Minifier::minify($string);

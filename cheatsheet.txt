@@ -1,0 +1,164 @@
+$R Framework (client-side)
+---------------------------------------------------------------------------------
+
+[Log (Ctrl+Alt+Shift+F12)]
+(Function) $R.log (title, value)
+
+[Event]
+/*
+ @typeSelector - That means at least one event type or comma or space-separated list of events or array
+                 of events with or without event type suffixes such as ":once" and/or ":ready"
+*/
+(Function) $R.on   | $R.addEventListener (typeSelector, listener)
+(Function) $R.off  | $R.removeEventListener (typeSelector, listener)
+(Function) $R.emit | $R.dispatchEvent (type, data, target, preventDefault, stopPropagation, dispatchComplete)
+(Function) $R.addEvent (type, target, preventDefault, stopPropagation, dispatchComplete)
+(Class)    $R.eventFactory ()
+
+
+[Event object]
+(String)   type               : ''
+(Object)   target             : null
+(Mixed)    data               : null
+(Function) preventDefault     : null
+(Function) stopPropagation    : null
+(Boolean)  defaultPrevented   : false
+(Boolean)  propagationStopped : false
+(Boolean)  returnValue        : true
+
+
+[Content]
+(Function) $R.xhr (/* [url,] options|callback */)
+// Include CSS or JavaScript from any server
+(Function) $R.include      (type:"css"|"js", url, callback, skipErrors)
+(Function) $R.include_once (type:"css"|"js", url, callback, skipErrors)
+// Require some content from server
+(Function) $R.require      (url, callback)
+(Function) $R.require_once (url, callback)
+// Extend framework namespace
+(Function) $R.inject       (url, callback)
+
+
+[XHR object properties]
+(String)   url            : location.href
+(String)   type           : 'GET'
+(String)   async          : true
+(String)   contentType    : null
+(String)   xRequestedWith : null
+(Mixed)    data           : ''
+(Boolean)  cache          : true
+(Object)   headers        : {}
+(Number)   timeout        : 30 * 1000;
+(Function) error          : null
+(Function) success        : null
+(Function) complete       : null
+
+
+[Module]
+(Function) $R.module.all ()
+(Function) $R.module.getById (id)
+(Function) $R.module.getByName (name)
+(Function) $R.module.getInstanceById(id, name, options, callback)
+(Function) $R.module.make(id, name, options, callback)
+(Class)    $R.module.group()
+(Function) $R.module.group().push (module, DOMNode)
+(Function) $R.module.group().show (options)
+(Function) $R.module.group().hide (options)
+(Function) $R.module.group().request (options)
+
+
+[Module instance]
+(Function) show (options)
+(Function) hide (options)
+(Function) request (options, callback)
+(Object)   instance
+(Object)   options
+(DOMNode)  options.DOM
+(String)   options.id
+(String)   options.name
+(Object)   options.options
+(Object)   options.spin
+
+
+[Page (for master mode only)]
+(Function) $R.page (name, callback)
+
+[Page definition]
+// Define page
+$R.page.define(name)
+       .name (name)
+       .title(title)
+       .options(options)
+       .layout(id, name, options, callback)
+       .module(location, position, id, name, options, callback)
+;
+// Manual create page
+$R.page.make(name)
+       .name (name)
+       .title(title)
+       .options(options)
+       .layout(id, name, options, callback)
+       .module(location, position, id, name, options, callback)
+       .exec();
+
+[Page instance]
+(Function) show (options)
+(Function) hide (options)
+(String)   name
+(Object)   body
+(Boolean)  body.IS_READY
+(Boolean)  body.IS_VISIBLE
+(String)   body.name
+(String)   body.layout
+(DOMNode)  body.DOM
+(Object)   body.AREA
+(Array)    body.MODULE
+(Object)   body.ARGS
+(Object)   body.ARGS.CREATE
+(Object)   body.ARGS.SHOW
+
+
+[Data storage]
+// In memory
+(Function) $R.storage.set (key, value)
+(Function) $R.storage.get (key)
+// Permanent (localStorage)
+(Function) $R.storage.permanent.local.set (key, value)
+(Function) $R.storage.permanent.local.get (key)
+// Permanent (on server-side)
+(Function) $R.storage.permanent.remote.set (key, value)
+(Function) $R.storage.permanent.remote.get (key)
+
+[Loading progress]
+(Class)    $R.progressBar ()
+(DOMNode)  $R.progressBar.node
+(Function) $R.progressBar.show ()
+(Function) $R.progressBar.hide ()
+(Function) $R.progressBar.done ()
+(Function) $R.progressBar.setLimit (num)
+(Function) $R.progressBar.setMessage (str)
+(Function) $R.progressBar.setCompleteMessage (str)
+(Function) $R.progressBar.setCompleteCallback (callback)
+(Function) $R.progressBar.setStepCallback (callback)
+(Function) $R.progressBar.setProgress (num)
+(Function) $R.progressBar.pushStep (num)
+(Function) $R.progressBar.doStep ()
+
+(Class)    $R.spin (ownerNode, spinNode)
+(DOMNode)  $R.spin.node
+(Function) $R.spin.show (ownerNode)
+(Function) $R.spin.hide ()
+(Function) $R.spin.isVisible ()
+(Function) $R.spin.owner (ownerNode)
+
+
+[Tools]
+(Function) $R.tools.on (event, node, handler, sign)
+(Function) $R.tools.off (event, node, handler, sign)
+(Function) $R.tools.hasClass (node, name)
+(Function) $R.tools.addClass (node, name)
+(Function) $R.tools.removeClass (node, name)
+(Function) $R.tools.getParentNodeByClass (node, name)
+(Function) $R.tools.hasClassParents (node, name)
+(Function) $R.tools.trim (str)
+(Function) $R.tools.merge (toObj, fromObj)

@@ -1,6 +1,39 @@
 $R.tools = (new function tools ($R){
   var that = this;
 
+  that.on = on;
+  that.off = off;
+  that.render = render;
+  that.isObject = isObject;
+  that.forObject = forObject;
+  that.isList = isList;
+  that.forList = forList;
+  that.each = each;
+  that.JSONP = JSONP;
+  that.Callback = Callback;
+  that.normalize = normalize;
+  that.basename = basename;
+  that.parseRequest = parseRequest;
+  that.makeQueryString = makeQueryString;
+  that.parseQueryString = parseQueryString;
+  that.escapeHTML = escapeHTML;
+  that.getRandom = getRandom;
+  that.extend = extend;
+  that.pregQuote = pregQuote;
+  that.assignStringValues = assignStringValues;
+  that.trim = trim;
+  that.makeClassListByString = makeClassListByString;
+  that.hasClass = hasClass;
+  that.hasClassParents = hasClassParents;
+  that.addClass = addClass;
+  that.removeClass = removeClass;
+  that.getParentNodebyClass = getParentNodebyClass;
+  that.detachDOMNode = detachDOMNode;
+  that.detachDOMNodes = detachDOMNodes;
+  that.makeHTMLCollectionByString = makeHTMLCollectionByString;
+  that.browser = new Browser;
+  that.blank = blank;
+
   function isObject (o)
    {
     return !!(o != null && typeof o == OBJECT);
@@ -484,7 +517,7 @@ $R.tools = (new function tools ($R){
    that.remove = remove;
   }
 
-  var browser = new function Browser ()
+  function Browser ()
    {
     function agent (s) {return (s!=null && typeof s==STRING) ? s : navigator.userAgent;}
 
@@ -516,40 +549,85 @@ $R.tools = (new function tools ($R){
     this.engine = engine;
     this.isMobile = isMobile;
     this.os = os;
-   };
+   }
 
-  that.on = on;
-  that.off = off;
-  that.isObject = isObject;
-  that.forObject = forObject;
-  that.isList = isList;
-  that.forList = forList;
-  that.each = each;
-  that.isArray = isList; //TODO: [DEPRECATED]. Use "isList"
-  that.JSONP = JSONP;
-  that.Callback = Callback;
-  that.normalize = normalize;
-  that.basename = basename;
-  that.parseRequest = parseRequest;
-  that.makeQueryString = makeQueryString;
-  that.parseQueryString = parseQueryString;
-  that.escapeHTML = escapeHTML;
-  that.getRandom = getRandom;
-  that.merge = extend;  //TODO: [DEPRECATED] Use extend(a, b) method instead of merge 
-  that.extend = extend; // Instead of merge
-  that.pregQuote = pregQuote;
-  that.assignStringValues = assignStringValues;
-  that.trim = trim;
-  that.makeClassListByString = makeClassListByString;
-  that.hasClass = hasClass;
-  that.hasClassParents = hasClassParents;
-  that.addClass = addClass;
-  that.removeClass = removeClass;
-  that.getParentNodebyClass = getParentNodebyClass;
-  that.detachDOMNode = detachDOMNode;
-  that.detachDOMNodes = detachDOMNodes;
-  that.makeHTMLCollectionByString = makeHTMLCollectionByString;
-  that.browser = browser;
+  function blank () {return 'data:image/png;base64,R0lGODlhFAAUAIAAAP///wAAACH5BAEAAAAALAAAAAAUABQAAAIRhI+py+0Po5y02ouz3rz7rxUAOw=='}
+
+  function render (DOM, value, fn)
+    {
+     function __construct ()
+      {
+       renderValue (DOM, value);
+      }
+
+     function isObject (v)
+      {
+       return (v != null && typeof v == 'object');
+      }
+
+     function isArray (v)
+      {
+       return (isObject(v) && v.length != null);
+      }
+
+     function handle (key, value, node, object)
+      {
+       if (typeof fn == 'function') fn(key, value, node, object);
+      }
+
+     function renderPrimitive (DOM, value)
+      {
+       if (!isObject(DOM) || isObject(value)) return;
+       var v = escapeHTML(String(value));
+       if (typeof DOM.value != 'undefined') DOM.value = v;
+       else if (typeof DOM.innerHTML != 'undefined') DOM.innerHTML = v;
+      }
+
+     function renderArray (DOM, array)
+      {
+       if (!isObject(DOM) || !isArray(array)) return;
+       var item = DOM.querySelector('.Item');
+       if (!item) return;
+
+       var parent = item.parentNode;
+       item.parentNode.removeChild(item);
+
+       function render (parent, node, value, key)
+        {
+         renderValue(node, value);
+         handle(key, value, node, array);
+         parent.appendChild(node);
+        }
+
+       for (var i in array) render(parent, item.cloneNode(true), array[i], i);
+      }
+
+     function renderObject (DOM, object)
+      {
+       if (!isObject(DOM) || !isObject(object)) return;
+       
+       function render (key, value)
+        {
+         if (typeof key != 'string') return;
+         var node = DOM.querySelector('.' + key);
+         if (!node) return;
+         renderValue(node, value);
+         handle(key, value, node, object);
+        }
+       
+       for (var i in object) render(i, object[i]);
+      }
+
+     function renderValue (DOM, value)
+      {
+       if (!isObject(DOM)) return;
+       if (isArray(value)) renderArray(DOM, value);
+       else if (isObject(value)) renderObject(DOM, value);
+       else renderPrimitive(DOM, value);    
+      }
+
+     __construct();
+    }
 
   /* MSIE DOM Events compability */
   (function() {

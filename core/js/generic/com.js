@@ -109,16 +109,32 @@ function Component (type, name, options, callback, id, onBeforeCreate)
     return (o == null) ? {} : o;
    }  
 
-  function extractNodes (dom, str)
-   {
+  function extractNodes (dom, def) {
     var o = {};
-    var s = str.split(',');
-    for (var i in s) o[s[i]] = dom.querySelector('.' + s[i]);
+    if (def) {
+      if (typeof def == STRING) {
+        var defs = def.split(/\s*;\s*/), def = {};
+        for (var i=0; i<defs.length; i++) {
+          var parts = defs[i].split(':');
+          var name = parts.shift().trim();
+          var selector = parts.join().trim();
+          if (name) {
+            def[name] = selector && selector.toLowerCase() != "true" ? selector : true;
+          }
+        }
+      }
+      if (typeof def == OBJECT) {
+        for (var i in def) {
+          o[i] = def[i] ? dom.querySelector(def[i] === true ? '.' + i : def[i]) : null;
+        }
+      }
+    } 
     return o;
-   }
+  }
 
   function $O ()
    {
+    var that = this;
     this.type = type;
     this.name = name;
     this.options = opts(options);
@@ -131,6 +147,11 @@ function Component (type, name, options, callback, id, onBeforeCreate)
     this.isVisible = isVisible;
     this.extractNodes = extractNodes;
     this.spin = new $R.spin(this.DOM);
+    this.template = function template (id, DOM) {
+      var tpl = DOM && typeof DOM == OBJECT ? getTemplate(id, DOM) : undefined;
+      if (typeof tpl != STRING) tpl = getTemplate(id, that.DOM) || getTemplate(id);
+      return tpl || '';
+    };
    }
 
   function __construct()
@@ -164,9 +185,9 @@ function Component (type, name, options, callback, id, onBeforeCreate)
      {
       that.instance = new cls($r, $o);
       prepareComponentUI(function(){
-       if(typeof that.instance.node == STRING)
+       if(that.instance.node && (typeof that.instance.node == STRING || typeof that.instance.node == OBJECT))
         {
-         that.options.node = extractNodes(that.options.DOM, that.instance.node);
+         that.options.node = that.instance.node = extractNodes(that.options.DOM, that.instance.node);
         }
        if(typeof that.instance.onCreate == FUNCTION)
         {
@@ -243,7 +264,12 @@ function Component (type, name, options, callback, id, onBeforeCreate)
     });
 
     extractComponentInstanceUIEntity('css', function(s){
-     that.options.stylesheet = $R.tools.makeCSSNodeByString(prepareStyleSheet(s));
+     var css = prepareStyleSheet(s);
+     if (DEBUG) {
+       var url = $R.url(makeComponentURL(that.options.type, that.options.name) + '/style.css');
+       css = $R.makeSourceURL(url, true) + '\n' + css;
+     }
+     that.options.stylesheet = $R.tools.makeCSSNodeByString(css);
      procCallback();
     });
    }

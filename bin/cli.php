@@ -1,6 +1,7 @@
 <?php include "minify.class.php";
 
 class R {
+  const VERSION = "3.0.0";
 
   const COMPILE_FILES = "txt, md, html, htm, xml, css, less, sass, scss, styl, js, json, ts, coffee";
 
@@ -11,7 +12,6 @@ class R {
 
   public static function cli () {
     header("Content-Type: text/plain");
-    echo "\nRockJS v3.0\n============";
 
     self::$_ENGINE_DIRECTORY = realpath(dirname(__FILE__).DIRECTORY_SEPARATOR."..");
 
@@ -19,7 +19,7 @@ class R {
     $args = $argv;
 
     if (!is_array($args)) exit(self::help());
-    if (!empty($args[0]) && realpath($args[0]) == __FILE__) array_shift($args);
+    if (!empty($args[0]) && realpath($args[0]) == realpath($_SERVER["SCRIPT_NAME"])) array_shift($args);
     $class = __CLASS__;
     if (!empty($args) && method_exists($class, "CLI_".self::cmd($args[0]))) {
       $method = "CLI_".self::cmd($args[0]);
@@ -125,6 +125,7 @@ class R {
   private static function help () {
     return
 "
+RockJS v".self::VERSION."\n=============
 Usage: php ".basename(__FILE__)." [command] <option> <value>
 
 Available commands:

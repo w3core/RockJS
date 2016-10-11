@@ -2,6 +2,14 @@
 
  var files = {};
 
+ function makeSourceURL (url, type) {
+   var s = '';
+   if (DEBUG && url) {
+     s = !!type ? ('/*# sourceURL='+url+' */') : ('//# sourceURL='+url+' ');
+   }
+   return s;
+ }
+
  function once (url, callback, loader)
   {
    if(files[url] == null || !files[url].status)
@@ -60,7 +68,9 @@
     {
      var ok = !!(xhr.status >= 200 && xhr.status <= 399);
      var r = xhr.responseText || '';
-     if (DEBUG && !!o.url.match(/\.js$/i))
+     var type = o.url.match(/\.(js|css)$/i);
+     if (type) type = type[1].toLowerCase();
+     if (DEBUG && !!type)
       {
        var url = o.url;
        if (o.type == 'GET' && o.data != null)
@@ -68,7 +78,7 @@
          url += (url.indexOf('?') >= 0) ? '&' : '?';
          url += makeQueryString(o.data);
         }
-       r = '//@ sourceURL=' + url + '\n' + r;
+       r = makeSourceURL(url, type=="css") + '\n' + r;
       }
      if (!ok)
       {
@@ -122,12 +132,41 @@
    q.contentType = (typeof o.contentType == STRING) ? o.contentType : null; // application/x-www-form-urlencoded | multipart/form-data
    q.xRequestedWith = (typeof o.xRequestedWith == STRING) ? o.xRequestedWith : null; // XMLHttpRequest
    q.data = (typeof o.data == OBJECT && o.data != null) ? o.data : null;
-   //TODO: Using once => q.cache = (typeof o.cache == BOOLEAN) ? o.cache : true;
+   q.cache = (typeof o.cache == BOOLEAN) ? o.cache : true;
    q.headers = (typeof o.headers == OBJECT && o.headers != null) ? o.headers : {};
    q.timeout = (typeof o.timeout == NUMBER) ? o.timeout : 30 * 1000;
    q.error = (typeof o.error == FUNCTION) ? o.error : function(){};
    q.success = (typeof o.success == FUNCTION) ? o.success : function(){};
    q.complete = (typeof o.complete == FUNCTION) ? o.complete : function(){};
+
+   if (q.cache && function(){
+     var query = q.data ? makeQueryString(q.data) : '', 
+         id = q.url + (!query ? '' : (q.url.indexOf('?') >= 0 ? '&' : '?') + query);
+     var cache = getTemplate(id);
+     if (typeof cache == STRING) {
+       var xhr = {
+         status: 302,
+         statusText: 'Found',
+         responseText: cache,
+       };
+       setTimeout(function(){
+         try {
+           var r = q.url.match(/.+\.json$/i) ? new Function('return ' + cache)() : cache;
+           q.success(r, xhr);
+           q.complete(r, xhr);
+         }
+         catch(e) {
+           $R.log('Javascript exception in cached XHR request callback execution process', {
+             message: e.message,
+             stack: (typeof e.stack != UNDEFINED) ? e.stack : e,
+             request: q
+            });
+         };
+       }, 0);
+       return true;
+     }
+     return;
+   }()) return;
 
    var xhr = makeXHR(q);
 
@@ -310,5 +349,5 @@
  $R.require = require; // Require any content from same domain
  $R.require_once = require_once; // Require any content once from same domain
  $R.inject = inject; // Inject any JS file from same domain to the private $R namespace
-
+ $R.makeSourceURL = makeSourceURL;
 }($R));
