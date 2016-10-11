@@ -1,15 +1,13 @@
 <?php
-include "jshrink.class.php";
+include "jsqueeze.class.php";
 
 class minify {
 
   public static function js ($string="") {
-    try {
-      $result = \JShrink\Minifier::minify($string);
-    }
-    catch (RuntimeException $e) {
-      $result = $string;
-    }
+    // Source: https://github.com/tchwork/jsqueeze
+    $minifier = new \Patchwork\JSqueeze();
+    $result = $minifier->squeeze($string, true, false);
+    $result = preg_replace("/^;/Us", "", $result);
     return $result;
   }
 

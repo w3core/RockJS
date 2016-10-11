@@ -66,7 +66,7 @@ function getComponent (type, name, callback)
     $R.require_once($R.url(url), function(s){
      try
       {
-       Components[key] = new Function('return ('+s+')')();
+       Components[key] = new Function('return ('+s.replace(/;$/g, '')+')')();
        $R.dispatchEvent('componentLoad', {type:type, name:name, body:Components[key]});
       }
      catch(e)
