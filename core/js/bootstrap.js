@@ -125,7 +125,7 @@
       {
        $R.addEventListener('initCOMMap:ready:once', function(){
         if ($R.config.client.purl == true) initRouter();
-        else renderInitialPage();        
+        else renderInitialPage();
        });
       }
 
@@ -178,6 +178,7 @@
    var onCOMLoad = function onCOMLoad () {
     $R.bootProgress.doStep('initCOM').setMessage('COM logic loaded');
    };
+   /*[include src="generic/urlpattern.js"]*/
    /*[include src="generic/com.js"]*/
    onCOMLoad();
   }

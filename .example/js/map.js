@@ -6,6 +6,7 @@
  *  $R.page
  *    .define(name)
  *    .name (name)
+ *    .route (route[, properties])
  *    .title(title)
  *    .options(options)
  *    .layout(id, name, options, callback)

@@ -1,15 +1,27 @@
 (new function ($R) {
- 
- function read ()
-  {
-   // http://{application.url}/#{page}[ ?{options} ]
+
+ var ie = !window.addEventListener, tools = $R.tools;
+
+ function read () {
    if (!$R.config.client.purl) return;
-   var o = $R.tools.parseRequest(location.hash.substring(1));
+   var page, url = location.hash.substring(1), si = url.indexOf('?'), pages = $R.page.defined(),
+       path = si >= 0 ? url.substr(0, si) : url,
+       qs = si >= 0 ? tools.normalize(tools.parseQueryString(url.substr(si+1, url.length))) : {}
+   ;
+   if (path[path.length-1] == '/') path = path.substr(0, path.length-1);
+   for (var i in pages) {
+     var opts = pages[i].get().route.match(path);
+     if (opts) {
+       page = {inf:pages[i], opts:tools.extend(opts, qs)};
+       break;
+     }
+   }
+
    return {
-    name: (o.path[0] && $R.page.defined()[String(o.path[0])]) ? String(o.path[0]) : $R.config.generic.page['default'].name,
-    options: o.query
+     name: page ? page.inf.get().name : $R.config.generic.page['default'].name,
+     options: page ? page.opts : qs
    };
-  }
+ }
 
  function exec ()
   {
@@ -34,7 +46,6 @@
   {
    if (!$R.config.client.purl) return;
    exec();
-   var ie = !!(window.addEventListener == null);
    window[!ie?'addEventListener':'attachEvent'](!ie?'hashchange':'onhashchange', exec, false);
   }
 

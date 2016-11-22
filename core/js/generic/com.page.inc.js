@@ -2,24 +2,18 @@
 
  var CurrentPage = null;
 
- function URL (name, options)
-  {
-   var q = $R.tools.makeQueryString(options);
-   return '#' + name + ( q.length ? '?' + q : '' );
-  }
-
  function Page (settings)
   {
    var that = this;
- 
+
    var IS_READY = false;
    var IS_VISIBLE = false;
- 
+
    var Progress = null;
    var Title = '';
- 
+
    that.name = null;
-   that.url = null;
+   that.route = null;
    that.options = object('options');
    that.options.create = null; // reserved for title, description, etc.
    that.options.show = null;
@@ -27,7 +21,7 @@
    that.layout = null;
    that.module = object('module');
    that.module.all = {};
- 
+
    function __construct ()
     {
      initEventListeners();
@@ -37,23 +31,24 @@
       $R.config.generic.layout["default"].name
      ,$R.config.generic.layout["default"].options
      );
-     makeModules();     
+     makeModules();
     }
- 
+
    function makeProgress ()
     {
      Progress = new $R.progressBar();
-     Progress . setMessage('Page loading...')
-              . setCompleteMessage('Page loading complete')
-              . setCompleteCallback(onProgressComplete)
-              ;     
+     Progress
+       .setMessage('Page loading...')
+       .setCompleteMessage('Page loading complete')
+       .setCompleteCallback(onProgressComplete)
+     ;
      Progress.pushStep('layout');
      if (typeof settings.module == OBJECT && settings.module.length)
       {
        Progress.pushStep('module', settings.module.length);
       }
     }
- 
+
    function defineSettings ()
     {
      if (typeof settings.name != STRING || !settings.name.length)
@@ -64,7 +59,10 @@
        throw [caption, msg].join('. ');
       }
      that.name = settings.name;
-     that.url = URL(that.name);
+     that.route = settings.route || null;
+     that.url = function url (options) {
+       return URL(that.name, options || that.options.show);
+     };
      if (settings.title != null) title(settings.title);
      if (typeof settings.options == OBJECT) that.options.create = settings.options;
     }
@@ -75,7 +73,7 @@
       {
        $R.addEventListener('execPageShow:ready', function (e) {
         if (e.returnValue == true && e.target == that) execShow(e.data);
-       });       
+       });
       }
     }
 
@@ -93,7 +91,7 @@
        name = defaultName;
        options = defaultOptions || null;
       }
- 
+
      that.layout = makeComponentInstance('layout', id, name, options, function(){
       Progress.setMessage('Page layout loaded').doStep('layout');
      });
@@ -103,7 +101,7 @@
        that.layout.ready(settings.layout.callback);
       }
     }
- 
+
    function makeModules ()
     {
      if (settings.module == null || typeof settings.module != OBJECT || !settings.module.length) return;
@@ -113,18 +111,18 @@
        addModule(o[i].location, o[i].position, o[i].id, o[i].name, o[i].options, function (){ Progress.doStep('module'); }).ready(o[i].callback);
       }
     }
- 
+
    function onProgressComplete ()
     {
      IS_READY = true;
-     $R.dispatchEvent('pageCreate', null, that);    
+     $R.dispatchEvent('pageCreate', null, that);
     }
- 
+
    function isReady ()
     {
      return IS_READY;
     }
- 
+
    function isVisible ()
     {
      return IS_VISIBLE;
@@ -139,13 +137,13 @@
         var o = that.layout.options.DOM.querySelector(that.layout.instance.title);
         if (o != null) o.innerHTML = $R.tools.escapeHTML(Title);
        }
-      else if (typeof that.layout.instance.title == FUNCTION) that.layout.instance.title(Title, that);      
+      else if (typeof that.layout.instance.title == FUNCTION) that.layout.instance.title(Title, that);
      });
     }
 
    function title (str)
     {
-     if (typeof str == STRING) 
+     if (typeof str == STRING)
       {
        Title = str;
        $R.dispatchEvent('titleChange', Title, that);
@@ -176,45 +174,45 @@
       }
      return that;
     }
- 
+
    function addPageClass ()
     {
      $R.tools.addClass(document.querySelector('html'), 'page-' + that.name);
     }
- 
+
    function removePageClass ()
     {
      $R.tools.removeClass(document.querySelector('html'), 'page-' + that.name);
     }
- 
+
    function modulePlaceClassString (module, location)
     {
      var s = 'module-exists-' + module.options.name;
-     if (typeof location == STRING && location != '*') s += ' ' + location + '-module-' + module.options.name; 
+     if (typeof location == STRING && location != '*') s += ' ' + location + '-module-' + module.options.name;
      return s;
     }
- 
+
    function addModulePlaceClass (module, location)
     {
      setTimeout(function(){
       $R.tools.addClass(that.layout.options.DOM, modulePlaceClassString(module, location));
      },0);
     }
- 
+
    function removeModulePlaceClass (module, location)
     {
      setTimeout(function(){
       $R.tools.removeClass(that.layout.options.DOM, modulePlaceClassString(module, location));
      },0);
-    }  
- 
+    }
+
    function touch (name)
     {
      var n = (typeof name == STRING) ? name : '*';
      if (that.module.all[n] == null) that.module.all[n] = [];
      return that.module.all[n];
     }
- 
+
    function resort (name)
     {
      var sort = function(ma,mb)
@@ -225,22 +223,22 @@
       };
      touch(name).sort(sort);
     }
- 
+
    function getDOMNestedModules (DOM)
     {
      // To avoid module-in-module nesting
      var o = [];
      for (var i=0; i<DOM.children.length; i++)
       {
-       if 
+       if
         (
-          DOM.children[i].tagName 
+          DOM.children[i].tagName
           && $R.tools.hasClass(DOM.children[i], 'module')
         ) o.push(DOM.children[i]);
       }
      return o;
     }
- 
+
    function setModuleDOMPosition (DOM, position, module)
     {
      if (DOM == null) return;
@@ -253,7 +251,7 @@
      if (modules.length <= position) DOM.appendChild(module.options.DOM);
      else DOM.insertBefore(module.options.DOM, modules[position]);
     }
- 
+
    function placeModule (location, position, module)
     {
      // The location that defined as (*) or (null) is using for background modules
@@ -267,10 +265,10 @@
       }
      that.layout.ready(function(){
       var DOM = that.layout.options.DOM.querySelector('.' + location);
-      setModuleDOMPosition(DOM, position, module);     
+      setModuleDOMPosition(DOM, position, module);
      });
     }
- 
+
    function addModule (location, position, id, name, options, callback)
     {
      var o = {};
@@ -283,7 +281,7 @@
      if (IS_VISIBLE) doModuleShow (location, o.position, o.object, that.options.show);
      return o.object;
     }
- 
+
    function doModuleShow (location, position, module, options)
     {
      that.layout.ready(function(){
@@ -292,10 +290,10 @@
        {
         addModulePlaceClass(module, location);
         module.show(options, that);
-       }      
+       }
      });
     }
- 
+
    function doModuleHide (location, module, options)
     {
      that.layout.ready(function(){
@@ -303,7 +301,7 @@
       module.hide(options, that);
      });
     }
- 
+
    function doPageShow ()
     {
      addPageClass();
@@ -321,7 +319,7 @@
      that.layout.show(that.options.show, that);
      $R.dispatchEvent('pageShow', that.options.show, that);
     }
- 
+
    function doPageHide ()
     {
      removePageClass();
@@ -335,12 +333,12 @@
      that.layout.hide(that.options.hide, that);
      $R.dispatchEvent('pageHide', that.options.hide, that);
     }
- 
+
    function execShow (o)
     {
      if (CurrentPage != null && CurrentPage.name != name) CurrentPage.hide();
      CurrentPage = that;
-     that.options.show = o || null;
+     that.options.show = o ? $R.tools.normalize(o) : null;
 
      IS_VISIBLE = true;
      showTitle();
@@ -353,23 +351,22 @@
        }
      });
     }
- 
+
    function show (o)
     {
-     that.url = URL(that.name, o);
-     if ($R.config.client.purl == true) location.hash = that.url;
+     if ($R.config.client.purl == true) location.hash = URL(that.name, o);
      else execShow(o);
      return that;
     }
- 
+
    function execHide (o)
     {
-     that.options.hide = o || null;
+     that.options.hide = o ? $R.tools.normalize(o) : null;
      IS_VISIBLE = false;
      if (IS_READY) doPageHide();
      else Progress.hide();
     }
- 
+
    function hide (o)
     {
      execHide(o);
@@ -377,7 +374,7 @@
     }
 
    __construct();
- 
+
    that.isReady = isReady;
    that.isVisible = isVisible;
    that.title = title;
@@ -385,23 +382,33 @@
    that.show = show;
    that.hide = hide;
   }
- 
+
  function PageFactory (name)
   {
    var that = this;
- 
+
    var o =
-    { 
+    {
      name: (typeof name == STRING) ? name : null
     ,title: null
     ,options: null
     ,layout: null
     ,module: []
     };
- 
+   if (typeof name == STRING) $route(name);
+
    that.name = function setname (str)
     {
-     if (typeof str == STRING) o.name = str;
+     if (typeof str == STRING) {
+       o.name = str;
+       if (!o.route) $route(str);
+     }
+     return that;
+    };
+
+   that.route = function route (route, params)
+    {
+     if (route) $route(route, params);
      return that;
     };
 
@@ -416,7 +423,7 @@
      if (typeof obj == OBJECT) o.options = obj;
      return that;
     };
- 
+
    that.layout = function layout (id, name, options, callback)
     {
      o.layout = {
@@ -427,7 +434,7 @@
      };
      return that;
     };
- 
+
    that.module = function module (location, position, id, name, options, callback)
     {
      o.module.push({
@@ -440,18 +447,62 @@
      });
      return that;
     };
- 
+
    that.exec = function exec ()
     {
      return new Page(o);
     };
- 
+
+   that.get = function get () {
+     return o;
+   };
+
+   function $route (route, params) {
+     if (route) {
+       if (typeof route == STRING) {
+         var route = route;
+         if (name == $R.config.generic.page['default'].name) route = '/';
+         else {
+           if (route[0] != '/') route = '/' + route;
+           if (route[route.length-1] == '/') route = route.substr(0, route.length-1);
+           route = route.replace(/\/+/g, '/');
+         }
+       }
+       o.route = new $R.UrlPattern(route, params);
+       o.route.origin = {route:route, params:params};
+     }
+   }
   }
- 
+
  //------------------------------------------------------------------------------
  var Definitions = object('definitions');
  var Pages = object('all');
- 
+
+ function URL (name, options) {
+   var page = name && Definitions[name] ? Definitions[name].get() : null;
+   var url;
+   if (page) {
+     try {
+       url = page.route.stringify(options);
+       if (options && typeof options == OBJECT) {
+         var o = {}, count=0;
+         for (var i in options) {
+           if (page.route.names.indexOf(i) < 0) {
+             count++;
+             o[i] = options[i];
+           }
+         }
+         if (count) url += '?' + $R.tools.makeQueryString(o);
+       }
+     }
+     catch (e){
+       $R.error(null, "Page URL building error", null, {page: page, options: options});
+       throw e;
+     };
+   }
+   return '#' + (url ? url : '');
+ }
+
  function getPredefinedPageByName (name)
   {
    if (Definitions[name] == null) return null;
@@ -478,7 +529,7 @@
    Definitions[name] = new PageFactory (name);
    return Definitions[name];
   };
- 
+
  $R.page.make = function make (name)
   {
    if (Pages[name] != null)
@@ -490,13 +541,13 @@
     }
    var o = new PageFactory (name);
    var e = o.exec;
-   o.exec = function exec () 
+   o.exec = function exec ()
     {
      Pages[name] = e();
     };
    return o;
   };
- 
+
  $R.page.get = function get (name)
   {
    if (name == null && CurrentPage != null) return CurrentPage;

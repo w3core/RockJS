@@ -102,7 +102,7 @@ $R.tools = (new function tools ($R){
     var t = {'true':true, 'false':false, 'null':null, 'undefined':undefined, 'NaN':NaN};
     if (o != null && typeof o == OBJECT)
      {
-      for (var i in o) o[i] = normalize(o[i]);
+      for (var i in o) if (o.hasOwnProperty(i)) o[i] = normalize(o[i]);
      }
     else if (typeof o == STRING)
      {
@@ -112,7 +112,7 @@ $R.tools = (new function tools ($R){
        }
       if(/^-?\d+\.?\d*$/mg.test(o))
        {
-        return Number(o);
+        return o*1;
        }
      }
     return o;
