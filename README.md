@@ -43,3 +43,16 @@ Basically, the page creation is based on the following structure:
 
 Visually it can be shown as follow:
 ![RockJS Structure](http://image.prntscr.com/image/f1234ff6a246416f938ec9c8e2344809.png)
+
+
+Lineaments
+---
+
+RockJS never re-rendering no one component instance if it's not required.
+
+Any resources of components such as DOM and stylesheets will be mounted to the document only when component is defined in the page layout and the page is shown.
+Otherwise, these resources will be unmounted from document when page will be hided.
+
+RockJS allows to create manually and use single instance of component for many pages at the same time.
+
+RockJS is an event based framework that means that any component will be notified about any changes of state and can handle these changes any time.
