@@ -37,9 +37,9 @@ features from the box that really needed in any powerful application such as:
 
 
 Basically, the page creation is based on the following structure:
-1. Modules aka Components (overwritable onCreate, onShow, onHide, etc.);
-2. Layouts (same as modules but used to describe page layout with areas for modules placements);
-3. Pages (simple definition what should be used: name, route, layout, modules with their location in layout);
+* Modules aka Components (overwritable onCreate, onShow, onHide, etc.);
+* Layouts (same as modules but used to describe page layout with areas for modules placements);
+* Pages (simple definition what should be used: name, route, layout, modules with their location in layout);
 
 Visually it can be shown as follow:
 ![RockJS Structure](http://image.prntscr.com/image/f1234ff6a246416f938ec9c8e2344809.png)
