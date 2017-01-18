@@ -15,6 +15,15 @@ because behind the scenes, implementation of this things requires invalidation
 of all levels of object when only one property has been changed.
 It's lead to low performance UI and rapid discharging of the battery on device.
 
+RockJS has really small size that allows to decrease loading time and show
+first screen.
+![RockJS Size](http://image.prntscr.com/image/b97b2b928a8c46e9a2ec91297a0d815d.png)
+
+Let's check loading speed for minimal application.
+Connection speed will be decreased to regular 2G (300ms, 250kbit/s, 50kbit/s)
+to simulate real-world conditions for mobile devices.
+![RockJS speed](http://image.prntscr.com/image/36f21e387b464d1dbe5a5947c85bd9c4.png)
+
 However, RockJS is well-structured modular framework that provides a list of
 features from the box that really needed in any powerful application such as:
 * Builtin lazy loading pattern;
