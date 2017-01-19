@@ -279,6 +279,41 @@ at least one `layout`.
    lazy-loading application in the `./httpserver/public/awesome` directory.
 
 
+Module
+---
+
+What is the module?
+Module is a component. In other words, a part or element of a larger whole and
+logically allocated part of the page.
+
+For the RockJS, component is a class that has independent DOM model and working
+by using declaration of special public properties and methods.
+
+Every instance of component will be created by passing of two arguments:
+* `$R` - an instance of application that created by RockJS.
+  This is an object that contains a many of global features within an anonymous
+  environment (such as configuration, pages helper, modules helper, tools,
+  and many many more);
+* `$O` - an instance of environment for the component, that contains references
+  to the DOM model, used by component DOM nodes (for the case when the component
+  has defined `this.node` property), instance of spinner, templating helpers, etc.
+
+To handling the global environment changes a component can define the following
+methods:
+* `onRequest (options)`
+* `onCreate (options)`
+* `onShow (options, page)`
+* `onHide (options, page)`
+
+Note that these methods can be called also by an another components that includes
+the component inside.
+
+Also, component can handle and emit global events by using of the following methods:
+* `$R.on (types, listener)`
+* `$R.off (types, listener)`
+* `$R.emit (type, data, target, preventCallback, stopCallback, completeCallback)`
+
+
 
 [image.1]: http://image.prntscr.com/image/b97b2b928a8c46e9a2ec91297a0d815d.png
 [image.2]: http://image.prntscr.com/image/36f21e387b464d1dbe5a5947c85bd9c4.png
