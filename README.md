@@ -77,7 +77,7 @@ Installation
 Clone or download sources to something like `rockjs` directory.
 This directory will be used for the building of all your projects.
 
-Also, for best usability you can define value of 
+Also, for best usability you can define value of
 `/path/to/your/rockjs/cli` into the system `PATH` environment.
 
 
@@ -93,21 +93,14 @@ process you can use command line interface (CLI).
    ```bash
    $ php rockjs/cli
    ```
-   or:
-   ```bash
-   $ php rockjs/cli -h
-   ```
-   or:
-   ```bash
-   $ php rockjs/cli --help
-   ```
+
    Returns something like that:
    <a name="cli"></a>
    ```bash
    RockJS v3.0.0
    =============
    Usage: php cli [command] <option> <value>
-   
+
    Available commands:
    ------------------
     -h, --help               Show this dialog
@@ -295,6 +288,87 @@ at least one `layout`.
    lazy-loading application in the `./httpserver/public/awesome` directory.
 
 
+Events system
+---
+
+Internally, RockJS is an event-based asynchronous framework.
+Any component can handle and emit internal and external events.
+
+### Event body
+
+An event is an object with the following structure:
+
+|   Type   | Name                 | Default |
+|----------|--------------------- |---------|
+| String   | `type`               | ''      |
+| Object   | `target`             | null    |
+| Mixed    | `data`               | null    |
+| Function | `preventDefault()`   | null    |
+| Function | `stopPropagation()`  | null    |
+| Boolean  | `defaultPrevented`   | false   |
+| Boolean  | `propagationStopped` | false   |
+| Boolean  | `returnValue`        | true    |
+
+
+### Event prefix
+
+An event system is extended by the special pseudo-prefixes such as
+`:ready` and `:once`.
+
+As for developer, these pseudo-prefixes, especially `:ready` allows
+to solve most of the day-to-day issues and simplify the code.
+
+The most often case for asynchronous system is when the component that
+has handler for some event has been loaded after then the event
+has been dispatched.
+
+`:ready` - Indicates that the listener should be called even if the event
+has been emitted before the listener was added.
+
+`:once`  - Indicates that the listener should be unsubscribed at once event
+will emitted.
+
+
+### Event methods
+
+To handle or emit an external events can be used these methods:
+
+* `$R.on (types, listener)` - The method registers the specified listener for single
+  or multiple space or comma separated events;
+  Any event that passed as argument can contain any combination of pseudo-prefixes.
+
+* `$R.off (types, listener)` - The method removes single or multiple space or comma
+  separated events listener that was previously registered;
+
+* `$R.emit (type, data, target, preventCallback, stopCallback, completeCallback)` - Asynchronously
+  calls each of the listeners registered for the event `type`, passing the supplied `data` and
+  `target` to each.
+
+  Also, an emmiter can handle calling of `preventDefault()`, `stopPropagation()` and
+  complete of execution process;
+
+  > Note that only first argument `type` is required.
+
+#### Usage example
+```javascript
+
+$R.emit("user.accepted", {
+  "id": 12345,
+  "email": "lorem.ipsum@dolor.sit"
+});
+
+//...
+
+function listener (e) {
+  console.log(e);
+  e.stopPropagation();
+}
+
+$R.on("user.accepted:ready:once, user.rejected:ready, user.update", listener);
+
+```
+
+
 Module
 ---
 
@@ -334,27 +408,63 @@ methods:
 > Note that these methods can be called also by an another components that includes
 > the component inside.
 
-Also, component can handle and emit global events by using of the following methods:
+Also, component can handle and emit both internal and/or external events.
+To create an internal event environment you can use `$R.eventFactory (this)` class,
+that extends your `this` object with internal event system.
 
-* `$R.on (types, listener)` - The method registers the specified listener on single
-  or multiple space or comma separated events;
+*For example:*
 
-  Any event that passed as argument can contain any combination of pseudo-prefixes
-  `:ready` and/or `:once`.
+```javascript
+function module_loremIpsum ($R, $O) {
+  var that = this;
 
-  * `:ready` - Indicates that the listener should be called even if the event has been
-    emitted before the listener was added.
+  constructor();
 
-  * `:once`  - Indicates that the listener should be unsubscribed at once event will emitted.
+  function constructor () {
+    new $R.eventFactory(that);
+    // After this call your module will be extended with the following methods:
+    // this.on(type, listener);
+    // this.off(type, listener);
+    // this.emit(type, data, target, preventCallback, stopCallback, completeCallback);
+  }
 
-* `$R.off (types, listener)` - The method removes single or multiple space or comma separated
-  events listener that was previously registered;
+}
+```
 
-* `$R.emit (type, data, target, preventCallback, stopCallback, completeCallback)` - Asynchronously
-  calls each of the listeners registered for the event `type`, passing the supplied `data` and
-  `target` to each.
-  Also emmiter can handle calling of `preventDefault()`, `stopPropagation()` and
-  complete of execution process;
+### Working with external modules
+*TBD*
+
+Layout
+---
+*TBD*
+
+Page
+---
+*TBD*
+
+Routing
+---
+*TBD*
+
+Content delivery
+---
+*TBD*
+
+Embedding
+---
+*TBD*
+
+Templating and Precaching
+---
+*TBD*
+
+Bootstrap and loading progress
+---
+*TBD*
+
+Logging and Mobile debugging
+---
+*TBD*
 
 
 
