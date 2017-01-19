@@ -163,16 +163,24 @@ at least one `layout`.
 
   *Excellent!*
   Your `awesome` project has been created in the `projects` directory.
+
   As you can see `awesome` directory contains the following:
+
   * `[layouts]` - the directory where should be placed application layouts
+
   * `[modules]` - the directory where should be placed application modules
+
   * `[js]` - the directory where you can place some general scripts, some
      third-party `libs`, etc.
      Also you can see the following files in this directory:
+
      * `config.js` - an application configuration file;
+
      * `inc.js` - the file that will be placed to the main bundle
         and allows to control bootstrap logic;
+
      * `map.js` - the file where you can to define your pages
+
   * `index.html` - Point of entry to your application.
 
 2. Create your first module from console:
@@ -183,8 +191,11 @@ at least one `layout`.
 
    Right now your first module `hello` has been created as a directory and
    contains the following files:
+
    * `script.js` - Module controller
+
    * `index.html` - Module markup
+
    * `style.css` - Module stylesheet
 
    > For now we will skip details.
@@ -290,28 +301,55 @@ For the RockJS, component is a class that has independent DOM model and working
 by using declaration of special public properties and methods.
 
 Every instance of component will be created by passing of two arguments:
+
 * `$R` - an instance of application that created by RockJS.
   This is an object that contains a many of global features within an anonymous
   environment (such as configuration, pages helper, modules helper, tools,
   and many many more);
+
 * `$O` - an instance of environment for the component, that contains references
   to the DOM model, used by component DOM nodes (for the case when the component
   has defined `this.node` property), instance of spinner, templating helpers, etc.
 
 To handling the global environment changes a component can define the following
 methods:
-* `onRequest (options)`
-* `onCreate (options)`
-* `onShow (options, page)`
-* `onHide (options, page)`
 
-Note that these methods can be called also by an another components that includes
-the component inside.
+* `onRequest (options)` - This method can be used to communicate between components
+  even when component instance was not created yet;
+
+* `onCreate (options)` - This method will be called once when component instance
+  has been created and environment of component `$O` is completely ready;
+
+* `onShow (options, page)` - This method will be called every time when component
+  instance should be shown;
+
+* `onHide (options, page)` - This method will be called every time when component
+  instance should be hidden;
+
+> Note that these methods can be called also by an another components that includes
+> the component inside.
 
 Also, component can handle and emit global events by using of the following methods:
-* `$R.on (types, listener)`
-* `$R.off (types, listener)`
-* `$R.emit (type, data, target, preventCallback, stopCallback, completeCallback)`
+
+* `$R.on (types, listener)` - The method registers the specified listener on single
+  or multiple space or comma separated events;
+
+  Any event that passed as argument can contain any combination of pseudo-prefixes
+  `:ready` and/or `:once`.
+
+  * `:ready` - Indicates that the listener should be called even if the event has been
+    emitted before the listener was added.
+
+  * `:once`  - Indicates that the listener should be unsubscribed at once event will emitted.
+
+* `$R.off (types, listener)` - The method removes single or multiple space or comma separated
+  events listener that was previously registered;
+
+* `$R.emit (type, data, target, preventCallback, stopCallback, completeCallback)` - Asynchronously
+  calls each of the listeners registered for the event `type`, passing the supplied `data` and
+  `target` to each.
+  Also emmiter can handle calling of `preventDefault()`, `stopPropagation()` and
+  complete of execution process;
 
 
 
