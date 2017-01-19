@@ -2,6 +2,11 @@
 
 The next generation single-page application framework.
 
+[TOC]
+
+Introduction
+---
+
 You can skip out this framework if you need some solution to create simple and
 tiny business card site.
 
