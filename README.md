@@ -2,7 +2,32 @@
 
 The next generation single-page application framework.
 
-[TOC]
+Table of contents
+===
+
+* [Introduction](#introduction)
+* [Lineaments](#lineaments)
+* [Requirements](#requirements)
+* [Installation](#installation)
+* [Quick Start Guide](#quick-start-guide)
+  * [CLI](#cli)
+  * [Hello World!](#hello-world)
+* [Events system](#events-system)
+  * [Event body](#event-body)
+  * [Event prefix](#event-prefix)
+  * [Event methods](#event-methods)
+    * [Usage example](#usage-example)
+* [Module](#module)
+  * [Working with external modules](#working-with-external-modules)
+* [Layout](#layout)
+* [Page](#page)
+* [Routing](#routing)
+* [Content delivery](#content-delivery)
+* [Embedding](#embedding)
+* [Templating and Precaching](#templating-and-precaching)
+* [Templating and Precaching](#templating-and-precaching)
+* [Logging and Mobile debugging](#logging-and-mobile-debugging)
+
 
 Introduction
 ---
