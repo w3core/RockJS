@@ -464,7 +464,7 @@ To manipulate with modules inside an application (for example: getting a class o
 instance of module, embed one module or group of modules to another one, etc.)
 can be useful Module Manager `$R.module` that provides following features.
 
-##### $R.module.make(id, name, options, callback)
+#### $R.module.make(id, name, options, callback)
 Creates and immediately returns an instance of module even if the module was
 not loaded yet. It allows to show, hide or do any requests to the module
 without waiting for loading.
@@ -489,7 +489,7 @@ var articleModule = $R.module.make(null, "article", {id: 12345}, function (artic
 });
 ```
 
-##### $R.module.getById (id)
+#### $R.module.getById (id)
 Return an instance of module that was created with specified ID.
 
 > Considering to the fact that application has implementation of Lazy Loading
@@ -512,39 +512,39 @@ if (!userModuleInstance) {
 }
 ```
 
-##### $R.module.getInstanceById (id, name, options, callback)
+#### $R.module.getInstanceById (id, name, options, callback)
 Same as `$R.module.getById (id)` excluding the fact that the instance of the
 module will be created if not exists yet.
 
-##### $R.module.getByName (name)
+#### $R.module.getByName (name)
 Returns an array of all instances of module by name that already exists.
 
-##### $R.module.all ()
+#### $R.module.all ()
 Returns an array of all instances of modules that has created in application
 at the moment.
 
-##### $R.module.group()
+#### $R.module.group()
 This class allows to create a wrapper module to group any amount of module
 instances and control them at the same time.
 An instance of this class provides the following methods.
 
-##### $R.module.group().push (module, DOMNode)
+#### $R.module.group().push (module, DOMNode)
 This method allows to push an instance or array of instances of modules
 to the group. As optional, you can define the DOM node where an instance(s)
 should be injected.
 
-##### $R.module.group().eject(module)
+#### $R.module.group().eject(module)
 This method ejects any instance of module from group.
 
-##### $R.module.group().show (options)
+#### $R.module.group().show (options)
 This method turns on all instances of modules in group to show.
 As optional, you can to define any options that will be passed for showing.
 
-##### $R.module.group().hide (options)
+#### $R.module.group().hide (options)
 This method turns off all instances of modules in group by calling of `onHide` method.
 As optional, you can to define any options that will be passed for hiding.
 
-##### $R.module.group().request (options)
+#### $R.module.group().request (options)
 This method allows to call `onRequest` method for all instances of modules
 in group at same time.
 
