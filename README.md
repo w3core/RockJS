@@ -16,16 +16,17 @@ Table of contents
   * [Event body](#event-body)
   * [Event prefix](#event-prefix)
   * [Event methods](#event-methods)
-    * [Usage example](#usage-example)
+  * [Usage example](#usage-example)
 * [Module](#module)
-  * [Working with external modules](#working-with-external-modules)
+* [Module Manager](#module-manager)
 * [Layout](#layout)
 * [Page](#page)
 * [Routing](#routing)
 * [Content delivery](#content-delivery)
 * [Embedding](#embedding)
 * [Templating and Precaching](#templating-and-precaching)
-* [Templating and Precaching](#templating-and-precaching)
+* [System Events](#system-events)
+* [Bootstrap and loading progress](#bootstrap-and-loading-progress)
 * [Logging and Mobile debugging](#logging-and-mobile-debugging)
 
 
@@ -120,7 +121,7 @@ process you can use command line interface (CLI).
    ```
 
    Returns something like that:
-   <a name="cli"></a>
+
    ```bash
    RockJS v3.0.0
    =============
@@ -456,8 +457,113 @@ function module_loremIpsum ($R, $O) {
 }
 ```
 
-### Working with external modules
-*TBD*
+Module manager
+---
+
+To manipulate with modules inside an application (for example: getting a class or
+instance of module, embed one module or group of modules to another one, etc.)
+can be useful Module Manager `$R.module` that provides following features.
+
+##### $R.module.make(id, name, options, callback)
+Creates and immediately returns an instance of module even if the module was
+not loaded yet. It allows to show, hide or do any requests to the module
+without waiting for loading.
+The spinner inside the module will be shown while it's not available yet.
+Any requests to the module will be added to queue and executed when the module
+logic will be available.
+
+| Argument   | Type                | Description
+|------------|---------------------|-------------------------------
+| `id`       | *optional* String   | An unique custom identifier that allows instance selection of the module by ID.
+| `name`     | *required* String   | An unique name of the module that required for loading module.
+| `options`  | *optional* Object   | An object of options that should be passed to the module to create instance of module with specific options. These options will be passed to `onCreate (options)` method of the module.
+| `callback` | *optional* Function | The function that should be called when instance of the module will be created.
+
+For example:
+```javascript
+
+var articleModule = $R.module.make(null, "article", {id: 12345}, function (article){
+  console.log(article);
+  // You can call any internal method of the module
+  article.instance.anyInternalMethod();
+});
+```
+
+##### $R.module.getById (id)
+Return an instance of module that was created with specified ID.
+
+> Considering to the fact that application has implementation of Lazy Loading
+> pattern, the desired module can be not defined at the moment yet.
+> In this case, you can add your handler for the `componentCreate` event.
+> For example:
+
+```javascript
+var userModuleInstance = $R.module.getById("user");
+
+if (!userModuleInstance) {
+  $R.on("componentCreate:ready", listener);
+
+  function listener (e) {
+    if (e.target.options.id == id) {
+      userModuleInstance = e.target;
+      $R.off("componentCreate", listener);
+    }
+  }
+}
+```
+
+##### $R.module.getInstanceById (id, name, options, callback)
+Same as `$R.module.getById (id)` excluding the fact that the instance of the
+module will be created if not exists yet.
+
+##### $R.module.getByName (name)
+Returns an array of all instances of module by name that already exists.
+
+##### $R.module.all ()
+Returns an array of all instances of modules that has created in application
+at the moment.
+
+##### $R.module.group()
+This class allows to create a wrapper module to group any amount of module
+instances and control them at the same time.
+An instance of this class provides the following methods.
+
+##### $R.module.group().push (module, DOMNode)
+This method allows to push an instance or array of instances of modules
+to the group. As optional, you can define the DOM node where an instance(s)
+should be injected.
+
+##### $R.module.group().eject(module)
+This method ejects any instance of module from group.
+
+##### $R.module.group().show (options)
+This method turns on all instances of modules in group to show.
+As optional, you can to define any options that will be passed for showing.
+
+##### $R.module.group().hide (options)
+This method turns off all instances of modules in group by calling of `onHide` method.
+As optional, you can to define any options that will be passed for hiding.
+
+##### $R.module.group().request (options)
+This method allows to call `onRequest` method for all instances of modules
+in group at same time.
+
+** Usage example: **
+```javascript
+var myGroup = new $R.module.group();
+
+myGroup.push(headerInstance)
+       .push(footerInstance)
+       .push([leftSide, rightSide], pannelsNode)
+       .show({
+       	 lorem: "Ipsum",
+         sit: "Amet"
+       });
+
+setTimeout(function(){
+  myGroup.hide().eject([leftSide, rightSide]);
+}, 2e3);
+```
 
 Layout
 ---
@@ -483,6 +589,10 @@ Templating and Precaching
 ---
 *TBD*
 
+System Events
+---
+*TBD*
+
 Bootstrap and loading progress
 ---
 *TBD*
@@ -497,7 +607,6 @@ Logging and Mobile debugging
 [image.2]: http://image.prntscr.com/image/36f21e387b464d1dbe5a5947c85bd9c4.png
 [image.3]: http://image.prntscr.com/image/f1234ff6a246416f938ec9c8e2344809.png
 
-[cli]: #cli
 [cli.example.sh]: https://github.com/w3core/RockJS/blob/master/cli.example.sh
 [cli.example.bat]: https://github.com/w3core/RockJS/blob/master/cli.example.bat
 
