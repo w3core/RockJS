@@ -416,19 +416,27 @@ Every instance of component will be created by passing of two arguments:
   to the DOM model, used by component DOM nodes (for the case when the component
   has defined `this.node` property), instance of spinner, templating helpers, etc.
 
+Usually, most of your modules will contain UI components.
+To define UI of module you can use the following properties:
+
+* `{String | Boolean} this.html`- this property allows to define HTML markup of module.
+* `{String | Boolean} this.css` - this property allows to define CSS stylesheets of module.
+* `{String | Object} this.node` - this property helps you to select DOM nodes to the `$O.node`
+  object for working with them.
+
 To handling the global environment changes a component can define the following
 methods:
 
-* `onRequest (options)` - This method can be used to communicate between components
+* `this.onRequest (options)` - This method can be used to communicate between components
   even when component instance was not created yet;
 
-* `onCreate (options)` - This method will be called once when component instance
+* `this.onCreate (options)` - This method will be called once when component instance
   has been created and environment of component `$O` is completely ready;
 
-* `onShow (options, page)` - This method will be called every time when component
+* `this.onShow (options, page)` - This method will be called every time when component
   instance should be shown;
 
-* `onHide (options, page)` - This method will be called every time when component
+* `this.onHide (options, page)` - This method will be called every time when component
   instance should be hidden;
 
 > Note that these methods can be called also by an another components that includes
