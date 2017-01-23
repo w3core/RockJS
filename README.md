@@ -420,9 +420,63 @@ Usually, most of your modules will contain UI components.
 To define UI of module you can use the following properties:
 
 * `{String | Boolean} this.html`- this property allows to define HTML markup of module.
+
 * `{String | Boolean} this.css` - this property allows to define CSS stylesheets of module.
+
 * `{String | Object} this.node` - this property helps you to select DOM nodes to the `$O.node`
   object for working with them.
+
+A `this.html` and `this.css` properties can be defined by the following ways:
+
+* As inline string. So, you can put as string some HTML strings or CSS properties;
+
+* As Embedded content (more preffered way) by using special embedding tag `include`
+  that provided by RockJS (see [here](#embedding)).
+
+  For example:
+  ```javascript
+  this.html = String(/*[include src="index.html" format="STRING"]*/);
+  this.css = String(/*[include src="style.css" format="STRING"]*/);
+  ```
+
+* As a `boolean` sign that means that `this.html`/`this.css` files should be loaded by
+  RockJS from the `index.html`/`style.css` file that placed in the module directory.
+  This way is less preffered, because requires to create an additional HTTP requests
+  that increase loading time.
+
+A `this.node` property allows to predefine any amount of DOM nodes from the module DOM
+that helps working with them for a long time. This property can be defined by different ways:
+
+* As `object` that should provide properties with a property name as an internal reference
+  name and property value as a reference CSS selector in the module DOM.
+  Also, you can define the property value as boolean `true`, that means that internal reference
+  name it the same as element className.
+
+  For example:
+  ```javascript
+  this.node = {
+    "userName": ".user > input.name",
+    "userForm": true // that means ".userForm"
+  };
+  ```
+
+* As a special-formatted string that has similar to `object` way format.
+
+  For example:
+  ```javascript
+  this.node = "userName: .user > input.name; userForm";
+  ```
+All predefined nodes will be available in the `$O.node` object at once when
+the module will be created.
+
+It will be something like that:
+```javascript
+// $O.node
+{
+  "userName": [DOM node],
+  "userForm": [DOM node]
+}
+```
 
 To handling the global environment changes a component can define the following
 methods:
