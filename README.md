@@ -664,9 +664,100 @@ setTimeout(function(){
 }, 2e3);
 ```
 
+
 Layout
 ---
-*TBD*
+
+Page layout is the part of graphic design that deals in the arrangement of visual elements
+on a page. It generally involves organizational principles of composition to achieve specific
+communication objectives.
+The high-level page layout involves deciding on the overall arrangement of text and images,
+and possibly on the size or shape of the medium.
+
+Page layout might be described a greater or lesser degree as a page style which might be
+implemented in a specific template.
+
+Typical page layout decisions include:
+
+* Generic font family and size
+* Generic size of margins and paddings
+* Generic colors
+* Size and position of main areas such as header, body, footer and side pannels
+* Some specific UI blocks, that can be used by different components, etc.
+
+In terms of implementation, the layouts practically is same as modules because they
+are both a components, but with different mission.
+
+Basically, the most of your layout/s will not provides any javascript logic excluding
+`this.html` and `this.css` definition and it's fine.
+
+Feel free to describe some of extra-features by using javascript if you need.
+It's a normally too.
+
+An example of typical layout will be something like that.
+
+`script.js`
+
+```javascript
+function layout_default ($R, $O) {
+  this.html = String(/*[include src="index.html" format="STRING"]*/);
+  this.css = String(/*[include src="style.css" format="STRING"]*/);
+}
+```
+
+`index.html`
+
+```xml
+<header class="headerModulesArea"></header>
+<content class="contentModulesArea"></content>
+<!-- ... -->
+<footer class="footerModulesArea"></footer>
+```
+
+`style.css`
+
+```css
+html, body {
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: sans-serif;
+  font-size: 16px;
+}
+header {
+  z-index: 2;
+  position: absolute;
+  box-sizing: border-box;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5em;
+  background: rgba(0,0,0,.8);
+  color: #fff;
+}
+content {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  padding: 5em 1em 3em;
+}
+footer {
+  z-index: 2;
+  position: absolute;
+  box-sizing: border-box;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 3em;
+  background: rgba(0,0,0,.8);
+  color: #fff;
+}
+```
 
 Page
 ---
@@ -674,7 +765,61 @@ Page
 
 Routing
 ---
-*TBD*
+By default, all pages that was defined has own route that based on the page name.
+But practically, you can overload it for make a pretty semantic URL considering
+to one or more specific parameters.
+
+Page routing can be described by two different ways.
+For most of cases you can define route as a string with named segments.
+But in some cases it can be not enough. Then route can be defined as regular expression.
+
+### Route as a string
+
+Definition of route as a string provides the following features.
+
+```javascript
+"/user/:id(/post/:postId(/*))"
+```
+
+##### Named segments
+
+`:id` (in the example above) is a named segment.
+
+A named segment starts with `:` followed by the name.
+The name must be at least one character in the regex character set `a-zA-Z0-9`.
+When matching, a named segment consumes all characters in the regex character set
+`a-zA-Z0-9-_~ %`. A named segment match stops at `/`, `.` but not at `_`, `-`, `%`.
+If a named segment name occurs more than once in the pattern string, then the multiple
+results are stored in an array on the returned object.
+
+#### Optional segments
+
+`(/post/:postId(/*))` (in the example above) is an optional segment.
+
+To make part of a pattern optional just wrap it in `(` and `)`.
+Optional named segments are stored in the corresponding property only if they are present
+in the source string.
+
+#### Wildcards
+
+`*` (in the example above) is a wildcard matches.
+Wildcard matches will be collected to the `_` property.
+If there is only one wildcard then `_` contains the matching string. Otherwise `_` contains
+an array of matching strings.
+
+### Route as a regular expression
+
+If the pattern was created from a regex an array of the captured groups is returned on a match.
+When making a pattern from a regex you can pass an array of keys as the second argument.
+For this case will be returned an objects on match with each key mapped to a captured value.
+
+```javascript
+route(/^\/api\/([^\/]+)(?:\/(\d+))?$/, ["resource", "id"])
+
+// For "/api/users" returns {resource: "users"}
+// For "/api/users/5" returns {resource: "users", id: "5"}
+// For "/api/users/foo" returns null because "id" should be "\d+"
+```
 
 Content delivery
 ---
