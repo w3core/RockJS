@@ -444,6 +444,7 @@ A `this.html` and `this.css` properties can be defined by the following ways:
   This way is less preffered, because requires to create an additional HTTP requests
   that increase loading time.
 
+<a name="this-node"></a>
 A `this.node` property allows to predefine any amount of DOM nodes from the module DOM
 that helps working with them for a long time. This property can be defined by different ways:
 
@@ -518,6 +519,42 @@ function module_loremIpsum ($R, $O) {
 
 }
 ```
+
+#### An `$O` object structure
+
+* `DOM {node}` Sandboxed DOM node of component instance;
+
+* `node {object}` The object of named DOM nodes (see [details](#this-node));
+
+* `id {string|null}` An unique identifier of component instance (see [details](#module-manager));
+
+* `name {string}` The name of the component for which one was created instance (see [details](#module-manager));
+
+* `options {object}` An object of instance options;
+
+* `template (id[, DOM]) {function}` This function allows to extract template body by `id` of template and
+  as an optional `DOM` node where it placed. By default, initially it tries to get template from the
+  component DOM and then from the current `document.body` node.
+
+  Template definition format: `<script type="text/template" id="{id}"> {template} </script>`
+
+* `spin {spinner}` Own instance of spinner for the current instance of component;
+
+* `stylesheet {style}` A DOM node of stylesheet for the current instance of component;
+
+* `type {string}` A type of component (module/layout/etc.);
+
+* `isReady {function}` This function allows to check is ready an instance of component or not at the moment;
+
+* `isVisible {function}` This function allows to check is visible an instance of component or not at the moment;
+
+* `extractNodes (dom, def) {function}` This function allows to create a reference object between module
+  DOM nodes and them reference property names.
+
+  * `dom {node}` The DOM node that contains nodes which are listed in `def`
+
+  * `def {string|object}` Reference definition
+
 
 Module manager
 ---
