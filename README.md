@@ -107,12 +107,20 @@ Any resources of components such as DOM and stylesheets will be mounted to the
 document only when component is defined in the page layout and the page is shown.
 Otherwise, these resources will be unmounted from document when page will be hided.
 
+RockJS allows to create and show any page or component on the fly without waiting
+for the loading complete.
+
 RockJS allows to create manually and use single instance of component for many
 pages at the same time.
 
 RockJS is an event based framework that means that any component will be notified
 about any changes of state and can handle these changes any time.
 
+RockJS provides a wrapper for any page or component (layout, module, etc.) that
+has specific-named classnames which allows to describe UI for any case as you wish.
+
+RockJS provides solutions which allows easily embed or gum up any components or
+content as you need.
 
 ## Requirements
 
@@ -539,7 +547,7 @@ function module_loremIpsum ($R, $O) {
 }
 ```
 
-### `$O` object structure
+### $O object structure
 
 * `DOM {node}` Sandboxed DOM node of component instance;
 
