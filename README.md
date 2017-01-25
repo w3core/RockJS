@@ -2,43 +2,66 @@
 
 The next generation single-page application framework.
 
-Table of contents
-===
+## Table of contents
+ - [Introduction](#introduction)
+ - [Lineaments](#lineaments)
+ - [Requirements](#requirements)
+ - [Installation](#installation)
+ - [Quick Start Guide](#quick-start-guide)
+    - [CLI](#cli)
+    - [Hello World!](#hello-world)
+ - [Events system](#events-system)
+    - [Event body](#event-body)
+    - [Event prefix](#event-prefix)
+    - [Event methods](#event-methods)
+    - [Usage example](#usage-example)
+ - [Module](#module)
+    - [$O object structure](#o-object-structure)
+ - [Module manager](#module-manager)
+    - [$R.module.make(id, name, options, callback)](#rmodulemakeid-name-options-callback)
+       - [Component instance structure](#component-instance-structure)
+    - [$R.module.getById (id)](#rmodulegetbyid-id)
+    - [$R.module.getInstanceById (id, name, options, callback)](#rmodulegetinstancebyid-id-name-options-callback)
+    - [$R.module.getByName (name)](#rmodulegetbyname-name)
+    - [$R.module.all ()](#rmoduleall)
+    - [$R.module.group()](#rmodulegroup)
+       - [$R.module.group().push (module, DOMNode)](#rmodulegrouppush-module-domnode)
+       - [$R.module.group().eject(module)](#rmodulegroupejectmodule)
+       - [$R.module.group().show (options)](#rmodulegroupshow-options)
+       - [$R.module.group().hide (options)](#rmodulegrouphide-options)
+       - [$R.module.group().request (options)](#rmodulegrouprequest-options)
+ - [Layout](#layout)
+ - [Page](#page)
+    - [$R.page.make(name)](#rpagemakename)
+       - [Page constructor structure](#page-constructor-structure)
+       - [Page instance structure](#page-instance-structure)
+    - [$R.page.all()](#rpageall)
+    - [$R.page.define(name)](#rpagedefinename)
+    - [$R.page.defined()](#rpagedefined)
+    - [$R.page.get(name)](#rpagegetname)
+    - [$R.page.url(name, options)](#rpageurlname-options)
+ - [Routing](#routing)
+    - [Route as a string](#route-as-a-string)
+       - [Named segments](#named-segments)
+       - [Optional segments](#optional-segments)
+       - [Wildcards](#wildcards)
+    - [Route as a regular expression](#route-as-a-regular-expression)
+ - [Content delivery](#content-delivery)
+ - [Embedding](#embedding)
+ - [Templating and Precaching](#templating-and-precaching)
+ - [System Events](#system-events)
+ - [Bootstrap and loading progress](#bootstrap-and-loading-progress)
+ - [Logging and Mobile debugging](#logging-and-mobile-debugging)
 
-* [Introduction](#introduction)
-* [Lineaments](#lineaments)
-* [Requirements](#requirements)
-* [Installation](#installation)
-* [Quick Start Guide](#quick-start-guide)
-  * [CLI](#cli)
-  * [Hello World!](#hello-world)
-* [Events system](#events-system)
-  * [Event body](#event-body)
-  * [Event prefix](#event-prefix)
-  * [Event methods](#event-methods)
-  * [Usage example](#usage-example)
-* [Module](#module)
-* [Module Manager](#module-manager)
-* [Layout](#layout)
-* [Page](#page)
-* [Routing](#routing)
-* [Content delivery](#content-delivery)
-* [Embedding](#embedding)
-* [Templating and Precaching](#templating-and-precaching)
-* [System Events](#system-events)
-* [Bootstrap and loading progress](#bootstrap-and-loading-progress)
-* [Logging and Mobile debugging](#logging-and-mobile-debugging)
 
-
-Introduction
----
+## Introduction
 
 You can skip out this framework if you need some solution to create simple and
 tiny business card site.
 
-RockJS is a high performance cross-browser framework that allows to create a
-powerful Desktop, Android or iOS native-like applications with a big amount of
-UI components.
+RockJS is a minimalistic, high-performance and intuitive SPA framework that allows
+to create a powerful Desktop, Android or iOS native-like applications with a big
+amount of UI components.
 
 This framework contains only those features that really needed.
 It does not implements so popular things as observing, data-binding, etc.
@@ -76,8 +99,7 @@ Visually it can be shown as follow:
 ![RockJS Structure][image.3]
 
 
-Lineaments
----
+## Lineaments
 
 RockJS never re-rendering no one component instance if it's not required.
 
@@ -92,14 +114,14 @@ RockJS is an event based framework that means that any component will be notifie
 about any changes of state and can handle these changes any time.
 
 
-Requirements
----
+## Requirements
+
 The only thing that you need is PHP command line interface which used for
 application build process (see: [here][1]).
 
 
-Installation
----
+## Installation
+
 Clone or download sources to something like `rockjs` directory.
 This directory will be used for the building of all your projects.
 
@@ -107,8 +129,7 @@ Also, for best usability you can define value of
 `/path/to/your/rockjs/cli` into the system `PATH` environment.
 
 
-Quick Start Guide
----
+## Quick Start Guide
 
 To create new application, layout, module or for the runing of build application
 process you can use command line interface (CLI).
@@ -314,8 +335,7 @@ at least one `layout`.
    lazy-loading application in the `./httpserver/public/awesome` directory.
 
 
-Events system
----
+## Events system
 
 Internally, RockJS is an event-based asynchronous framework.
 Any component can handle and emit internal and external events.
@@ -375,7 +395,7 @@ To handle or emit an external events can be used these methods:
 
   > Note that only first argument `type` is required.
 
-#### Usage example
+### Usage example
 ```javascript
 
 $R.emit("user.accepted", {
@@ -395,8 +415,7 @@ $R.on("user.accepted:ready:once, user.rejected:ready, user.update", listener);
 ```
 
 
-Module
----
+## Module
 
 What is the module?
 Module is a component. In other words, a part or element of a larger whole and
@@ -520,7 +539,7 @@ function module_loremIpsum ($R, $O) {
 }
 ```
 
-#### An `$O` object structure
+### `$O` object structure
 
 * `DOM {node}` Sandboxed DOM node of component instance;
 
@@ -556,14 +575,13 @@ function module_loremIpsum ($R, $O) {
   * `def {string|object}` Reference definition
 
 
-Module manager
----
+## Module manager
 
 To manipulate with modules inside an application (for example: getting a class or
 instance of module, embed one module or group of modules to another one, etc.)
 can be useful Module Manager `$R.module` that provides following features.
 
-#### $R.module.make(id, name, options, callback)
+### $R.module.make(id, name, options, callback)
 Creates and immediately returns an instance of module even if the module was
 not loaded yet. It allows to show, hide or do any requests to the module
 without waiting for loading.
@@ -578,7 +596,7 @@ logic will be available.
 | `options`  | *optional* Object   | An object of options that should be passed to the module to create instance of module with specific options. These options will be passed to `onCreate (options)` method of the module.
 | `callback` | *optional* Function | The function that should be called when instance of the module will be created.
 
-For example:
+**For example:**
 ```javascript
 
 var articleModule = $R.module.make(null, "article", {id: 12345}, function (article){
@@ -588,7 +606,22 @@ var articleModule = $R.module.make(null, "article", {id: 12345}, function (artic
 });
 ```
 
-#### $R.module.getById (id)
+#### Component instance structure
+
+The component (layouts and modules) instance provides the following properties and methods.
+
+| Name                        | Type     | Description
+|-----------------------------|----------|-------------
+| `ready(callback)`           | Function | Allows to define function to call if/when component instance will be completely ready.
+| `show(options,page)`        | Function | Allows to show component instance even if instance is not ready yet. As optional arguments, it can take `options` object for showing and instance of `page`.
+| `hide(options,page)`        | Function | Allows to hide component instance even if instance is not ready yet. As optional arguments, it can take `options` object for hiding and instance of `page`.
+| `request(options,callback)` | Function | This method can be used to communicate between components even if component instance is not ready yet. As optional arguments, it can take `options` object and `callback` function.
+| `isReady()`                 | Function | Returns a boolean to understand that instance of component is ready for showing (loaded and created) either not. Anyway an instance can be shown but it leads to showing of internal spinner of instance.
+| `isVisible()`               | Function | Returns a boolean to understand that instance of component is visible at the moment either not.
+| `instance`                  | Object   | An internal environment (methods and properties) of instance.
+| `options`                   | Object   | An options of the component (see [$O](#o-object-structure)).
+
+### $R.module.getById (id)
 Return an instance of module that was created with specified ID.
 
 > Considering to the fact that application has implementation of Lazy Loading
@@ -611,18 +644,20 @@ if (!userModuleInstance) {
 }
 ```
 
-#### $R.module.getInstanceById (id, name, options, callback)
+### $R.module.getInstanceById (id, name, options, callback)
 Same as `$R.module.getById (id)` excluding the fact that the instance of the
 module will be created if not exists yet.
 
-#### $R.module.getByName (name)
+### $R.module.getByName (name)
 Returns an array of all instances of module by name that already exists.
 
-#### $R.module.all ()
+### $R.module.all ()
 Returns an array of all instances of modules that has created in application
 at the moment.
 
-#### $R.module.group()
+The structure of instance of module you can find [here](#component-instance-structure).
+
+### $R.module.group()
 This class allows to create a wrapper module to group any amount of module
 instances and control them at the same time.
 An instance of this class provides the following methods.
@@ -647,7 +682,8 @@ As optional, you can to define any options that will be passed for hiding.
 This method allows to call `onRequest` method for all instances of modules
 in group at same time.
 
-** Usage example: **
+*Usage example:*
+
 ```javascript
 var myGroup = new $R.module.group();
 
@@ -665,8 +701,7 @@ setTimeout(function(){
 ```
 
 
-Layout
----
+## Layout
 
 Page layout is the part of graphic design that deals in the arrangement of visual elements
 on a page. It generally involves organizational principles of composition to achieve specific
@@ -759,12 +794,119 @@ footer {
 }
 ```
 
-Page
----
-*TBD*
 
-Routing
----
+## Page
+
+A page is a completely abstraction that composed by the layout and any amount of modules.
+All these modules, except of background workers, should be placed into landing areas of
+the layout. It should be described on the page level of abstraction for any individual page.
+Any layout should provide one or more amount of landing areas that can be identified by
+an unique className.
+
+Different pages can contain both individually and as shared instance of module.
+In this case the instance of module will be moved to the page which is showing at the moment.
+
+To manage pages of SPA site, RockJS provides pages manager that named as `$R.page` and has
+the following methods.
+
+### $R.page.make(name)
+This method returns a page constructor that allows completely describe (title,
+layout, modules, routing, etc.) and immediately create a page.
+
+> The `name` of page should be unique within the application.
+
+#### Page constructor structure
+All methods of the page constructor instance excluding `get()` and `exec()`
+returns reference to this instance.
+
+| Method                                             | Description
+|----------------------------------------------------|------------
+| name(name)                                         | Allows to define page name. The `name` of page should be unique within the application.
+| title(title)                                       | Allows to define page title.
+| options(options)                                   | Allows to define an options object that should be applied to create the page.
+| route(route[,map])                                 | Allows to define page route (see [here](#routing)).
+| layout(id,name,options,callback)                   | Allows to define custom layout that will be applied to the page. By default, will be used the default layout (`$R.config.generic.layout.default.name`) that can be configured in the `your/project/js/config.js` file.
+| module(location,position,id,name,options,callback) | Creates and puts new instance of module to the page. For the module to be visible on the page should be defined an existing `location` (landing area - an unique className of HTML element) in the page layout and `position` (which one is order number in `location`). Rest of arguments has been described [here](#module-manager).
+| module(location,position,instance)                 | Puts an existing `instance` of module to the page.
+| get()                                              | Returns a definition object at the moment.
+| exec()                                             | Creates and puts just created [instance](#page-instance-structure) of page in the pages collection.
+
+*Usage example:*
+
+```javascript
+$R.page
+  .make("user")
+  .title("User Profile")
+  .route("/user/:userId")
+  .layout(null, "customLayout")
+  .module("header", null, null, "profileMenu")
+  .module("content", null, null, "userNavigation")
+  .module("content", null, null, "userNotifications")
+  .module("content", null, null, "userEditForm")
+  .module("footer", null, null, "footerLinks")
+  .options({"userId": 12345})
+  .exec()
+;
+```
+
+#### Page instance structure
+
+The page instance provides the following properties and methods.
+
+| Name            | Description
+|-----------------|-------------
+| isReady()       | Returns a boolean to understand that page is ready for showing (layout and modules has been loaded and created) either not. Anyway page can be shown but it leads to showing of page loading progress.
+| isVisible()     | Returns a boolean to understand that page is visible at the moment either not.
+| ready(callback) | Allows to define `callback` function to call if/when page instance will be completely ready.
+| show(options)   | Allows to show page instance even if instance is not ready yet. As optional arguments, it can take `options` object for showing.
+| hide(options)   | Allows to hide page instance even if instance is not ready yet. As optional arguments, it can take `options` object for hiding.
+| title(title)    | Allows to change the `title` of the page instance.
+| url(options)    | Returns URL string to the current page by an optional `options` object. The `options` that figured out in the page route will be placed there. Rest of `options` will be transformed to the query string.
+| layout          | An instance of [layout](#component-instance-structure) that was defined for the page.
+| module          | An array of instances of modules that has been placed to the page at the moment.
+| options         | An object that contains the latest options that was applied to the page to `create`, `show` and `hide` an instance.
+| route           | Low-level instance of route.
+
+*Usage example:*
+
+```javascript
+$R.page
+  .get("user")                 // Get instance of an existing page
+  .title("Adam Smith Profile") // Set page title
+  .show({                      // Show page instance with params
+    "id": 12345
+  })
+;
+```
+
+### $R.page.all()
+Returns an object of all instances of pages that has created in application
+at the moment. The name of property in this object is an unique name of page.
+
+An instance of page has structure that was [described earlier](#page-instance-structure).
+
+### $R.page.define(name)
+This is page constructor that is more prefered for usage than `$R.page.make`,
+because it allows to define any amount of pages without of creation.
+The pages will be automatically created only when will be required.
+It allows to increase of loading speed.
+This page constructor has the same structure that you can find [here](#page-constructor-structure).
+
+### $R.page.defined()
+Returns an object of all definitions of pages which was defined in application
+at the moment. The name of property in this object is an unique name of page.
+
+### $R.page.get(name)
+Returns an instance of page by optional `name` parameter that was created earlier.
+By default, returns an instance of current visible page.
+
+### $R.page.url(name, options)
+Returns a string representation of URL to any page by the page `name` and
+optional `options` parameters.
+
+
+## Routing
+
 By default, all pages that was defined has own route that based on the page name.
 But practically, you can overload it for make a pretty semantic URL considering
 to one or more specific parameters.
@@ -781,7 +923,7 @@ Definition of route as a string provides the following features.
 "/user/:id(/post/:postId(/*))"
 ```
 
-##### Named segments
+#### Named segments
 
 `:id` (in the example above) is a named segment.
 
@@ -821,28 +963,22 @@ route(/^\/api\/([^\/]+)(?:\/(\d+))?$/, ["resource", "id"])
 // For "/api/users/foo" returns null because "id" should be "\d+"
 ```
 
-Content delivery
----
+## Content delivery
 *TBD*
 
-Embedding
----
+## Embedding
 *TBD*
 
-Templating and Precaching
----
+## Templating and Precaching
 *TBD*
 
-System Events
----
+## System Events
 *TBD*
 
-Bootstrap and loading progress
----
+## Bootstrap and loading progress
 *TBD*
 
-Logging and Mobile debugging
----
+## Logging and Mobile debugging
 *TBD*
 
 
