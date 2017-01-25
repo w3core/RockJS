@@ -17,6 +17,7 @@ The next generation single-page application framework.
     - [Usage example](#usage-example)
  - [Module](#module)
     - [$O object structure](#o-object-structure)
+    - [Compositions and naming features](#compositions-and-naming-features)
  - [Module manager](#module-manager)
     - [$R.module.make(id, name, options, callback)](#rmodulemakeid-name-options-callback)
        - [Component instance structure](#component-instance-structure)
@@ -581,6 +582,24 @@ function module_loremIpsum ($R, $O) {
   * `dom {node}` The DOM node that contains nodes which are listed in `def`
 
   * `def {string|object}` Reference definition
+
+### Compositions and naming features
+
+To embed or gum up anything such as markup blocks, stylesheets, base64 encoded
+content or something else in any file, can be used `include` tag.
+For more details [look here](#embedding).
+
+From the view side, any module has a `<div>` wrapper that has specific-named
+classnames such as `module` and `module-{moduleName}` that linked to CSS via
+special `#this` selector.
+In other words, to link any part of the module markup with his styles, you don't
+need to start CSS selector from `module-loremIpsumDolorSitAmet...`.
+Instead of this you can just write `#this` that will be automatically replaced
+to valid classname.
+
+Moreover, relative URLs supported from the `style.css` file (such as
+background-image, etc.), despite the fact that behind the scenes, all components
+are loaded as content via AJAX.
 
 
 ## Module manager
