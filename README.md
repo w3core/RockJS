@@ -47,8 +47,9 @@ The next generation single-page application framework.
        - [Optional segments](#optional-segments)
        - [Wildcards](#wildcards)
     - [Route as a regular expression](#route-as-a-regular-expression)
- - [Content delivery](#content-delivery)
+ - [Server Tags](#server-tags)
  - [Embedding](#embedding)
+ - [Content delivery](#content-delivery)
  - [Templating and Precaching](#templating-and-precaching)
  - [System Events](#system-events)
  - [Bootstrap and loading progress](#bootstrap-and-loading-progress)
@@ -747,8 +748,52 @@ Typical page layout decisions include:
 * Size and position of main areas such as header, body, footer and side pannels
 * Some specific UI blocks, that can be used by different components, etc.
 
-In terms of implementation, the layouts practically is same as modules because they
+In terms of implementation, the layouts practically is same as [modules](#module) because they
 are both a components, but with different mission.
+
+The only difference between them is the following:
+
+* Additional string property `this.title` that can be used to define selector
+  inside the DOM of component to duplicate [page](#page) title value.
+
+  *For example:* `this.title = "h1.title";`
+
+* Another one difference that the `<div>` wrapper of layout has `layout` class and
+  `layout-` prefix instead of `module` as for module.
+
+* Additionally, the `<div>` wrapper of layout and landing areas has a list of
+  additional classes such as `module-exists-{moduleName}` and
+  `{areaName}-module-{moduleName}` that provides ability to describe UI
+  depending on the inside modules.
+  Besides it you have ability to add dependencies for the current page, OS and
+  browser engine, because `<html>` tag contains appropriate classes too.
+
+  *For example:*
+
+  ```xml
+  <html class="windows webkit page-x">
+    <!-- ... -->
+    <div class="layout layout-default module-exists-z area-y-module-z">
+      <div class="area-y">
+        <div class="module module-z">
+          <!-- Module DOM here... -->
+        </div>
+      </div>
+    </div>
+    <!-- ... -->
+  </html>
+  ```
+
+  *And then you can do even something like that:*
+
+  ```css
+  /* The layout that contains "module-z" inside "area-y" on the "page-x" that
+   * running under Windows OS in Webkit based browser should have yellow background.
+   */
+  .windows.webkit.page-x .area-y-module-z {
+    background: yellow;
+  }
+  ```
 
 Basically, the most of your layout/s will not provides any javascript logic excluding
 `this.html` and `this.css` definition and it's fine.
@@ -876,6 +921,10 @@ $R.page
 ;
 ```
 
+Besides it you have ability to add dependencies for the current page
+`page-{pageName}`, OS and browser engine, because `<html>` tag contains appropriate
+classes too.
+
 #### Page instance structure
 
 The page instance provides the following properties and methods.
@@ -990,10 +1039,77 @@ route(/^\/api\/([^\/]+)(?:\/(\d+))?$/, ["resource", "id"])
 // For "/api/users/foo" returns null because "id" should be "\d+"
 ```
 
-## Content delivery
-*TBD*
+## Server tags
+
+RockJS has some amount of own server-tags which will be processed on the server
+at the deployment moment.
+The server-tags are wrapped in the language-specific comments to safe you source
+codes clean and syntax valid.
+
+The server-tag to be matched and processed should be in the following format.
+
+For JavaScript or CSS like syntax can be used both single as and multiline
+comments:
+```
+//[tagName attrX="" attrY=""]
+
+OR
+
+/*[tagName attrX="" attrY=""]*/
+
+OR
+
+/*[tagName
+    attrX=""
+    attrY=""
+    attrZ=""
+  ]*/
+```
+
+For HTML can be used XML-specific comments:
+```
+<!--[tagName attrX="" attrY=""]-->
+```
 
 ## Embedding
+
+In SPA applications very often there is a need to embed or gum up some parts to one,
+because it allows to reduce amount of HTTP requests to server that increases loading
+speed.
+It's really critically for the big and powerful applications because a big amount
+of components should to be loaded.
+
+To solve this issue, RockJS provides solution such as specific `include` tag,
+that will be processed on the server at the deployment moment.
+
+This tag allows to embed content of any file by relative or absolute path.
+
+```
+[include src="{(string) filename}"]
+```
+
+By default, content will be embed as is.
+But, optionally, included content can be converted to one of supported
+by RockJS formats by using of `format` attribute.
+
+To convert your content to JSON string you can define `format` attribute as `string`:
+```
+[include src="path/to/file" format="string"]
+```
+
+To convert your content to the base64 data URL string you can define `format`
+attribute as `base64`:
+```
+[include src="path/to/file" format="base64"]
+```
+
+For the case, if required file is not exists you can optionally define default
+value by `default` attribute:
+```
+[include src="path/to/file" format="string" default="onFileNotFound()"]
+```
+
+## Content delivery
 *TBD*
 
 ## Templating and Precaching
