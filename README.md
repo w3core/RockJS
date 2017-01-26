@@ -1106,7 +1106,8 @@ attribute as `base64`:
 For the case, if required file is not exists you can optionally define default
 value by `default` attribute:
 ```
-[include src="path/to/file" format="string" default="onFileNotFound()"]
+// Execute onFileNotFound() function if file is not exists
+[include src="path/to/file" default="onFileNotFound()"]
 ```
 
 ## Content delivery
