@@ -28,6 +28,11 @@
 (function(root, factory) {
   return root.UrlPattern = factory();
 })($R, function() {
+  if (!Array.isArray) {
+    Array.isArray = function(arg) {
+      return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+  }
   var slice = [].slice, P, UrlPattern, astNodeContainsSegmentsForProvidedParams, astNodeToNames, astNodeToRegexString, baseAstNodeToRegexString, concatMap, defaultOptions, escapeForRegex, getParam, keysAndValuesToObject, newParser, regexGroupCount, stringConcatMap, stringify;
   var _wildcard_ = "wildcard", _named_ = "named", _static_ = "static", _optional_ = "optional";
   escapeForRegex = function(string) {

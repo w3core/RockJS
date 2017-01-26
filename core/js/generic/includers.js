@@ -147,7 +147,7 @@
        var xhr = {
          status: 302,
          statusText: 'Found',
-         responseText: cache,
+         responseText: cache
        };
        setTimeout(function(){
          try {

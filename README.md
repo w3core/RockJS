@@ -49,21 +49,18 @@ The next generation single-page application framework.
     - [Route as a regular expression](#route-as-a-regular-expression)
  - [Server Tags](#server-tags)
  - [Embedding](#embedding)
- - [Content delivery](#content-delivery)
  - [Templating and Precaching](#templating-and-precaching)
  - [System Events](#system-events)
  - [Bootstrap and loading progress](#bootstrap-and-loading-progress)
+ - [Content delivery](#content-delivery)
  - [Logging and Mobile debugging](#logging-and-mobile-debugging)
 
 
 ## Introduction
 
-You can skip out this framework if you need some solution to create simple and
-tiny business card site.
-
-RockJS is a minimalistic, high-performance and intuitive SPA framework that allows
-to create a powerful Desktop, Android or iOS native-like applications with a big
-amount of UI components.
+RockJS is a minimalistic, high-performance and intuitive SPA framework that
+allows quickly create a powerful Desktop, Android or iOS native-like
+applications with a big amount of UI components.
 
 This framework contains only those features that really needed.
 It does not implements so popular things as observing, data-binding, etc.
@@ -1110,16 +1107,48 @@ value by `default` attribute:
 [include src="path/to/file" default="onFileNotFound()"]
 ```
 
-## Content delivery
-*TBD*
-
 ## Templating and Precaching
-*TBD*
+
+Besides of embedding feature to separate reusable blocks such as templates
+RockJS supports inline templates.
+
+Adding template via the script tag:
+```xml
+<script type="text/template" id="{id}">
+  <!-- Template body -->
+  This is the content of the template
+</script>
+```
+
+For getting template inside of module or layout can be used
+`$O.template(id[, DOM])` method (see [details](#o-object-structure)).
+
+Also templates can be used for precaching  of any URL.
+In other words, you can put  content to the template and put his URL to the `id`
+attribute. Getting of content via [$R.xhr](#content-delivery) by this URL will return content of this
+template instead of execution of AJAX HTTP request.
+
+*For example:*
+```xml
+<script type="text/template" id="https://google.com/">
+  <h1>Hello Google!</h1>
+</script>
+```
+and
+```javascript
+$R.xhr("https://google.com/", function(response){
+  // Shows dialog with message "<h1>Hello Google!</h1>"
+  alert(response);
+});
+```
 
 ## System Events
 *TBD*
 
 ## Bootstrap and loading progress
+*TBD*
+
+## Content delivery
 *TBD*
 
 ## Logging and Mobile debugging
