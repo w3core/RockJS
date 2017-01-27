@@ -51,6 +51,24 @@ The next generation single-page application framework.
  - [Embedding](#embedding)
  - [Templating and Precaching](#templating-and-precaching)
  - [System Events](#system-events)
+    - [pageShow event](#pageshow-event)
+    - [pageHide event](#pagehide-event)
+    - [pageCreate event](#pagecreate-event)
+    - [componentShow event](#componentshow-event)
+    - [componentHide event](#componenthide-event)
+    - [componentRequest event](#componentrequest-event)
+    - [componentCreate event](#componentcreate-event)
+    - [componentLoad event](#componentload-event)
+    - [titleChange event](#titlechange-event)
+    - [bootComplete event](#bootcomplete-event)
+    - [execPageShow event](#execpageshow-event)
+    - [error event](#error-event)
+    - [initConfig event](#initconfig-event)
+    - [initCOM event](#initcom-event)
+    - [initCOMMap event](#initcommap-event)
+    - [initTools event](#inittools-event)
+    - [initStorage event](#initstorage-event)
+    - [storage event](#storage-event)
  - [Bootstrap and loading progress](#bootstrap-and-loading-progress)
  - [Content delivery](#content-delivery)
  - [Logging and Mobile debugging](#logging-and-mobile-debugging)
@@ -1143,6 +1161,43 @@ $R.xhr("https://google.com/", function(response){
 ```
 
 ## System Events
+
+### `pageShow` event
+
+### `pageHide` event
+
+### `pageCreate` event
+
+### `componentShow` event
+
+### `componentHide` event
+
+### `componentRequest` event
+
+### `componentCreate` event
+
+### `componentLoad` event
+
+### `titleChange` event
+
+### `bootComplete` event
+
+### `execPageShow` event
+
+### `error` event
+
+### `initConfig` event
+
+### `initCOM` event
+
+### `initCOMMap` event
+
+### `initTools` event
+
+### `initStorage` event
+
+### `storage` event
+
 *TBD*
 
 ## Bootstrap and loading progress
