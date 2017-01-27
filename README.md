@@ -1125,8 +1125,8 @@ For getting template inside of module or layout can be used
 
 Also templates can be used for precaching  of any URL.
 In other words, you can put  content to the template and put his URL to the `id`
-attribute. Getting of content via [$R.xhr](#content-delivery) by this URL will return content of this
-template instead of execution of AJAX HTTP request.
+attribute. Getting of content via [$R.xhr](#content-delivery) by this URL will
+return content of this template instead of execution of AJAX HTTP request.
 
 *For example:*
 ```xml
@@ -1158,7 +1158,7 @@ $R.xhr("https://google.com/", function(response){
 
 [image.1]: http://image.prntscr.com/image/b97b2b928a8c46e9a2ec91297a0d815d.png
 [image.2]: http://image.prntscr.com/image/36f21e387b464d1dbe5a5947c85bd9c4.png
-[image.3]: http://image.prntscr.com/image/f1234ff6a246416f938ec9c8e2344809.png
+[image.3]: http://image.prntscr.com/image/6fc3203395fe4f6193c3884b9c4dc0ef.png
 
 [cli.example.sh]: https://github.com/w3core/RockJS/blob/master/cli.example.sh
 [cli.example.bat]: https://github.com/w3core/RockJS/blob/master/cli.example.bat
