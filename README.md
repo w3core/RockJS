@@ -250,7 +250,7 @@ at least one `layout`.
      * `inc.js` - the file that will be placed to the main bundle
         and allows to control bootstrap logic;
 
-     * `map.js` - the file where you can to define your pages
+     * `map.js` - the file where you can to define your pages ([more](#mapjs))
 
   * `index.html` - Point of entry to your application.
 
@@ -339,7 +339,7 @@ at least one `layout`.
 
 5. Create your first (default) page.
 
-   Open the `js/map.js` file and put there these strings:
+   Open the `js/map.js` file and put there these strings ([more](#mapjs)):
 
    `js/map.js`:
    ```javascript
@@ -1285,20 +1285,102 @@ been loaded and ready.
 
 ### `initCOMMap` event
 
-The `initCOMMap` [event](#event-body) occurs when `map.js` file has been loaded
-and evaluated and [pages definition](#rpagedefinename) process has been completed.
+The `initCOMMap` [event](#event-body) occurs when the [`map.js` file](#mapjs)
+has been loaded and evaluated and [pages definition](#rpagedefinename) process
+has been completed.
 
 See: [Page constructor structure](#page-constructor-structure).
 
 
 ## Bootstrap and loading progress
-*TBD*
+
+Sometimes or even for most cases occurs necessity to control bootstrap process
+before showing of page. It can be checking of authentication that requires an
+asynchronous API call, loading of some dependencies or something else.
+RockJS provides some endpoints and solutions that step-by-step allows to do it
+and visualize it for user.
 
 ### map.js
-*TBD*
+
+Any application can provide `js/map.js` file.
+This file used to define application pages. All pages that defined by using of
+`$R.page.define()` [page constructor](#rpagedefinename) will not created right
+away but will be created automatically only when it needed.
+
+For more details look at [$R.page.define()](#rpagedefinename) and
+[page constructor methods](#page-constructor-structure).
+
+> Note that you should not call `exec()` method that used to create the page
+> right away.
+
+*Usage example:*
+
+```javascript
+// For example create a mutual instances of modules that should be used
+// for different pages...
+var header = $R.module.make(null, "moduleName1");
+var footer = $R.module.make(null, "moduleName2");
+
+// Define the default endpoint page
+$R.page
+  .define($R.config.generic.page['default'].name)
+  .title("Awesome application")
+  .module("header", null, header)
+  .module("footer", null, footer)
+  .module("content", null, null, "landingContent")
+  //...
+;
+
+// Define any other page
+$R.page
+  .define("user")
+  .title("User Profile")
+  .route("/user/:userId")
+  .layout(null, "nonDefaultLayoutName")
+  .module("header", null, header)
+  .module("footer", null, footer)
+  .module("content", null, null, "userNavigation")
+  .module("content", null, null, "userNotifications")
+  .module("content", null, null, "userEditForm")
+;
+
+// etc...
+```
 
 ### inc.js
-*TBD*
+
+Any application can provide `js/inc.js` file.
+This file included by RockJS to the core bundle. So it can be used to control core
+bootstrap process. For example it can be checking of authentication that requires
+an asynchronous API calls, loading of some dependencies or something else.
+
+An application core is not completely loaded yet when this file included to the
+core. So you can control the behavior of application by adding of additional
+steps to the loading progress.
+
+The `bootComplete` event occurs only when all steps has been processed.
+For the case when you need to do something after boot, you can wrap it to the
+`onBoot(fn)` function.
+
+*For example:*
+
+```javascript
+// Push an additional step to the core loading process
+$R.bootProgress.pushStep("authentication");
+
+// Do something asynchronously
+$R.xhr("/auth", function(response){
+  $R.bootProgress
+    .doStep("authentication")
+    .setMessage("User authentication process complete.")
+  ;
+});
+
+// Do something after boot
+onBoot(function(){
+  console.log("### Application core has been loaded.");
+});
+```
 
 ### $R.progressBar
 *TBD*
