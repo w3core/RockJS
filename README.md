@@ -66,10 +66,11 @@ The next generation single-page application framework.
     - [initConfig event](#initconfig-event)
     - [initCOM event](#initcom-event)
     - [initCOMMap event](#initcommap-event)
-    - [initTools event](#inittools-event)
-    - [initStorage event](#initstorage-event)
-    - [storage event](#storage-event)
  - [Bootstrap and loading progress](#bootstrap-and-loading-progress)
+    - [map.js](#mapjs)
+    - [inc.js](#incjs)
+    - [$R.progressBar](#rprogressbar)
+    - [$R.bootProgress](#rbootprogress)
  - [Content delivery](#content-delivery)
  - [Logging and Mobile debugging](#logging-and-mobile-debugging)
 
@@ -1162,45 +1163,147 @@ $R.xhr("https://google.com/", function(response){
 
 ## System Events
 
+
 ### `pageShow` event
+
+The `pageShow` [event](#event-body) occurs when any page should be shown.
+An event `data` property contains an options that was applied to show the page.
+The `target` property contains the reference to the
+[page instance](#page-instance-structure).
+
 
 ### `pageHide` event
 
+The `pageHide` [event](#event-body) occurs when any page should be hidden.
+An event `data` property contains an options that was applied to hide the page.
+The `target` property contains the reference to the
+[page instance](#page-instance-structure).
+
+
 ### `pageCreate` event
+
+The `pageCreate` [event](#event-body) occurs when the new instance of any page
+has been created. The `target` of `pageCreate` event contains an
+[instance](#page-instance-structure) of just created page.
+
 
 ### `componentShow` event
 
+The `componentShow` [event](#event-body) occurs when any module or layout
+should be shown.
+An event `data` property contains an options that was applied to show component.
+The `target` property contains the reference to the
+[component instance](#component-instance-structure).
+
+
 ### `componentHide` event
+
+The `componentHide` [event](#event-body) occurs when any module or layout
+should be hidden.
+An event `data` property contains an options that was applied to hide component.
+The `target` property contains the reference to the
+[component instance](#component-instance-structure).
+
 
 ### `componentRequest` event
 
+The `componentRequest` [event](#event-body) occurs when any component was
+requested from an outside.
+An event `data` property contains an options that was passed with request.
+The `target` property contains the reference to the
+[component instance](#component-instance-structure).
+
+
 ### `componentCreate` event
+
+The `componentCreate` [event](#event-body) occurs when the new instance of any
+component has been created. The `target` of `componentCreate` event contains an
+[instance](#component-instance-structure) of just created component.
+
 
 ### `componentLoad` event
 
+The `componentLoad` [event](#event-body) occurs before `componentCreate` event
+when the component and all dependencies of this component has been loaded.
+Event `data` property contains the following properties:
+
+| Name   | Type       | Description
+|--------|------------|---------------------------------------------------------
+| `type` | *String*   | The type of [component](#module) ([`module`](#module) or [`layout`](#layout)).
+| `name` | *String*   | The name of [component](#module) that has been loaded.
+| `body` | *Function* | Constructor of [component](#module).
+
+
 ### `titleChange` event
+
+The `titleChange` [event](#event-body) occurs when the title of page has been
+changed by some reason.
+An event `data` property contains an actual value of page title.
+The `target` property contains the reference to the
+[page instance](#page-instance-structure).
+
 
 ### `bootComplete` event
 
+The `bootComplete` [event](#event-body) occurs at once when the application core
+with all dependencies has been loaded and completely ready for showing content.
+
+
 ### `execPageShow` event
+
+The `execPageShow` [event](#event-body) occurs when any page should be shown.
+This event unlike the `pageShow` event can be used for preventing of showing
+the page by using of `preventDefault()` event method.
+
+For example, it can be useful when user session has been expired and all requested
+pages should be rejected with redirect to the login page.
+
+An event `data` property contains an options that was applied to show the page.
+The `target` property contains the reference to the
+[page instance](#page-instance-structure).
+
 
 ### `error` event
 
+The `error` [event](#event-body) occurs when error occurred ([see more](#logging-and-mobile-debugging)).
+An event `data` property contains stack trace information or any custom dump to
+understand the reason of error.
+The `target` property contains the reference to the logic that throws an error.
+
+
 ### `initConfig` event
+
+The `initConfig` [event](#event-body) occurs when application configuration
+has been loaded.
+
 
 ### `initCOM` event
 
+The `initCOM` [event](#event-body) occurs when components management logic has
+been loaded and ready.
+
+
 ### `initCOMMap` event
 
-### `initTools` event
+The `initCOMMap` [event](#event-body) occurs when `map.js` file has been loaded
+and evaluated and [pages definition](#rpagedefinename) process has been completed.
 
-### `initStorage` event
+See: [Page constructor structure](#page-constructor-structure).
 
-### `storage` event
-
-*TBD*
 
 ## Bootstrap and loading progress
+*TBD*
+
+### map.js
+*TBD*
+
+### inc.js
+*TBD*
+
+### $R.progressBar
+*TBD*
+
+### $R.bootProgress
 *TBD*
 
 ## Content delivery
