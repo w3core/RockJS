@@ -3,76 +3,89 @@
 The next generation single-page application framework.
 
 ## Table of contents
- - [Introduction](#introduction)
- - [Lineaments](#lineaments)
- - [Requirements](#requirements)
- - [Installation](#installation)
- - [Quick Start Guide](#quick-start-guide)
-    - [CLI](#cli)
-    - [Hello World!](#hello-world)
- - [Events system](#events-system)
-    - [Event body](#event-body)
-    - [Event prefix](#event-prefix)
-    - [Event methods](#event-methods)
-    - [Usage example](#usage-example)
- - [Module](#module)
-    - [$O object structure](#o-object-structure)
-    - [Compositions and naming features](#compositions-and-naming-features)
- - [Module manager](#module-manager)
-    - [$R.module.make(id, name, options, callback)](#rmodulemakeid-name-options-callback)
-       - [Component instance structure](#component-instance-structure)
-    - [$R.module.getById (id)](#rmodulegetbyid-id)
-    - [$R.module.getInstanceById (id, name, options, callback)](#rmodulegetinstancebyid-id-name-options-callback)
-    - [$R.module.getByName (name)](#rmodulegetbyname-name)
-    - [$R.module.all ()](#rmoduleall)
-    - [$R.module.group()](#rmodulegroup)
-       - [$R.module.group().push (module, DOMNode)](#rmodulegrouppush-module-domnode)
-       - [$R.module.group().eject(module)](#rmodulegroupejectmodule)
-       - [$R.module.group().show (options)](#rmodulegroupshow-options)
-       - [$R.module.group().hide (options)](#rmodulegrouphide-options)
-       - [$R.module.group().request (options)](#rmodulegrouprequest-options)
- - [Layout](#layout)
- - [Page](#page)
-    - [$R.page.make(name)](#rpagemakename)
-       - [Page constructor structure](#page-constructor-structure)
-       - [Page instance structure](#page-instance-structure)
-    - [$R.page.all()](#rpageall)
-    - [$R.page.define(name)](#rpagedefinename)
-    - [$R.page.defined()](#rpagedefined)
-    - [$R.page.get(name)](#rpagegetname)
-    - [$R.page.url(name, options)](#rpageurlname-options)
- - [Routing](#routing)
-    - [Route as a string](#route-as-a-string)
-       - [Named segments](#named-segments)
-       - [Optional segments](#optional-segments)
-       - [Wildcards](#wildcards)
-    - [Route as a regular expression](#route-as-a-regular-expression)
- - [Server Tags](#server-tags)
- - [Embedding](#embedding)
- - [Templating and Precaching](#templating-and-precaching)
- - [System Events](#system-events)
-    - [pageShow event](#pageshow-event)
-    - [pageHide event](#pagehide-event)
-    - [pageCreate event](#pagecreate-event)
-    - [componentShow event](#componentshow-event)
-    - [componentHide event](#componenthide-event)
-    - [componentRequest event](#componentrequest-event)
-    - [componentCreate event](#componentcreate-event)
-    - [componentLoad event](#componentload-event)
-    - [titleChange event](#titlechange-event)
-    - [bootComplete event](#bootcomplete-event)
-    - [execPageShow event](#execpageshow-event)
-    - [error event](#error-event)
-    - [initConfig event](#initconfig-event)
-    - [initCOM event](#initcom-event)
-    - [initCOMMap event](#initcommap-event)
- - [Bootstrap and loading progress](#bootstrap-and-loading-progress)
-    - [map.js](#mapjs)
-    - [inc.js](#incjs)
-    - [$R.progressBar](#rprogressbar)
-    - [$R.bootProgress](#rbootprogress)
- - [Content delivery](#content-delivery)
- - [Logging and Mobile debugging](#logging-and-mobile-debugging)
+- [Introduction](#introduction)
+- [Lineaments](#lineaments)
+- [Requirements](#requirements)
+- [Installation](#installation)
+- [Quick Start Guide](#quick-start-guide)
+  - [CLI](#cli)
+  - [Hello World!](#hello-world)
+- [Events system](#events-system)
+  - [Event body](#event-body)
+  - [Event prefix](#event-prefix)
+  - [Event methods](#event-methods)
+  - [Usage example](#usage-example)
+- [Module](#module)
+  - [$O object structure](#o-object-structure)
+  - [Compositions and naming features](#compositions-and-naming-features)
+- [Module manager](#module-manager)
+  - [$R.module.make(id, name, options, callback)](#rmodulemakeid-name-options-callback)
+    - [Component instance structure](#component-instance-structure)
+  - [$R.module.getById (id)](#rmodulegetbyid-id)
+  - [$R.module.getInstanceById (id, name, options, callback)](#rmodulegetinstancebyid-id-name-options-callback)
+  - [$R.module.getByName (name)](#rmodulegetbyname-name)
+  - [$R.module.all ()](#rmoduleall)
+  - [$R.module.group()](#rmodulegroup)
+    - [$R.module.group().push (module, DOMNode)](#rmodulegrouppush-module-domnode)
+    - [$R.module.group().eject(module)](#rmodulegroupejectmodule)
+    - [$R.module.group().show (options)](#rmodulegroupshow-options)
+    - [$R.module.group().hide (options)](#rmodulegrouphide-options)
+    - [$R.module.group().request (options)](#rmodulegrouprequest-options)
+- [Layout](#layout)
+- [Page](#page)
+  - [$R.page.make(name)](#rpagemakename)
+    - [Page constructor structure](#page-constructor-structure)
+    - [Page instance structure](#page-instance-structure)
+  - [$R.page.all()](#rpageall)
+  - [$R.page.define(name)](#rpagedefinename)
+  - [$R.page.defined()](#rpagedefined)
+  - [$R.page.get(name)](#rpagegetname)
+  - [$R.page.url(name, options)](#rpageurlname-options)
+- [Routing](#routing)
+  - [Route as a string](#route-as-a-string)
+    - [Named segments](#named-segments)
+    - [Optional segments](#optional-segments)
+    - [Wildcards](#wildcards)
+  - [Route as a regular expression](#route-as-a-regular-expression)
+- [Server Tags](#server-tags)
+- [Embedding](#embedding)
+- [Templating and Precaching](#templating-and-precaching)
+- [System Events](#system-events)
+  - [pageShow event](#pageshow-event)
+  - [pageHide event](#pagehide-event)
+  - [pageCreate event](#pagecreate-event)
+  - [componentShow event](#componentshow-event)
+  - [componentHide event](#componenthide-event)
+  - [componentRequest event](#componentrequest-event)
+  - [componentCreate event](#componentcreate-event)
+  - [componentLoad event](#componentload-event)
+  - [titleChange event](#titlechange-event)
+  - [bootComplete event](#bootcomplete-event)
+  - [execPageShow event](#execpageshow-event)
+  - [error event](#error-event)
+  - [initConfig event](#initconfig-event)
+  - [initCOM event](#initcom-event)
+  - [initCOMMap event](#initcommap-event)
+- [Bootstrap and loading progress](#bootstrap-and-loading-progress)
+  - [map.js](#mapjs)
+  - [inc.js](#incjs)
+  - [$R.progressBar](#rprogressbar)
+    - [$R.progressBar.show()](#rprogressbarshow)
+    - [$R.progressBar.hide()](#rprogressbarhide)
+    - [$R.progressBar.setMessage(msg)](#rprogressbarsetmessagemsg)
+    - [$R.progressBar.setCompleteMessage(msg)](#rprogressbarsetcompletemessagemsg)
+    - [$R.progressBar.pushStep(id, amount)](#rprogressbarpushstepid-amount)
+    - [$R.progressBar.doStep(id, amount)](#rprogressbardostepid-amount)
+    - [$R.progressBar.setStepCallback(fn)](#rprogressbarsetstepcallbackfn)
+    - [$R.progressBar.setCompleteCallback(fn)](#rprogressbarsetcompletecallbackfn)
+    - [$R.progressBar.destroy()](#rprogressbardestroy)
+    - [$R.progressBar.auto(bool)](#rprogressbarautobool)
+    - [$R.progressBar.isAuto()](#rprogressbarisauto)
+    - [$R.progressBar.node](#rprogressbarnode)
+    - [Progress Bar UI customisation](#progress-bar-ui-customisation)
+  - [$R.bootProgress](#rbootprogress)
+- [Content delivery](#content-delivery)
+- [Logging and Mobile debugging](#logging-and-mobile-debugging)
 
 
 ## Introduction
@@ -478,7 +491,7 @@ A `this.html` and `this.css` properties can be defined by the following ways:
 * As Embedded content (more preffered way) by using special embedding tag `include`
   that provided by RockJS (see [here](#embedding)).
 
-  For example:
+  *For example:*
   ```javascript
   this.html = String(/*[include src="index.html" format="STRING"]*/);
   this.css = String(/*[include src="style.css" format="STRING"]*/);
@@ -498,7 +511,7 @@ that helps working with them for a long time. This property can be defined by di
   Also, you can define the property value as boolean `true`, that means that internal reference
   name it the same as element className.
 
-  For example:
+  *For example:*
   ```javascript
   this.node = {
     "userName": ".user > input.name",
@@ -508,7 +521,7 @@ that helps working with them for a long time. This property can be defined by di
 
 * As a special-formatted string that has similar to `object` way format.
 
-  For example:
+  *For example:*
   ```javascript
   this.node = "userName: .user > input.name; userForm";
   ```
@@ -640,7 +653,7 @@ logic will be available.
 | `options`  | *optional* Object   | An object of options that should be passed to the module to create instance of module with specific options. These options will be passed to `onCreate (options)` method of the module.
 | `callback` | *optional* Function | The function that should be called when instance of the module will be created.
 
-**For example:**
+*For example:*
 ```javascript
 
 var articleModule = $R.module.make(null, "article", {id: 12345}, function (article){
@@ -1383,10 +1396,199 @@ onBoot(function(){
 ```
 
 ### $R.progressBar
-*TBD*
+
+This is a class that provides similar to the JavaScript Promise logic but more
+flexible and with built in UI which can be customized and turned on or turned
+off when it needed.
+
+```javascript
+var progress = new $R.progressBar();
+```
+> Any method of instance of `$R.progressBar` returns the reference to the instance.
+
+A progress bar UI is a graphical control element used to visualize the progression
+of an extended operation, such as a download, file transfer, or installation.
+The graphic is accompanied by a percentage representation of the progress and an
+optional textual messages.
+
+![$R.progressBar][image.4]
+
+#### $R.progressBar.show()
+
+Appends to document and shows DOM node of `$R.progressBar` instance.
+> Note that `z-index` of progress node will be increased every time to cover the
+> previous shown progress.
+
+```javascript
+var progress = new $R.progressBar();
+progress.show();
+```
+
+#### $R.progressBar.hide()
+
+Hides DOM node of `$R.progressBar` instance by removing from document.
+
+#### $R.progressBar.setMessage(msg)
+
+Used for describing of the current process to the visitor.
+In other words, you can describe to user what currently you do or what are you
+going to do by passing string or DOM node as `msg` argument.
+
+*For example:*
+```javascript
+var progress = new $R.progressBar();
+progress.setMessage("Connection to server").show();
+
+setTimeout(function(){
+  progress.setMessage("Authentification");
+}, 2000);
+```
+
+#### $R.progressBar.setCompleteMessage(msg)
+
+This method is very similar to the [`$R.progressBar.setMessage(msg)`](#rprogressbarsetmessagemsg)
+but used to define the message that should be shown when the progress has been
+completed. In other words, when percentage value of progress is equal to 100%.
+
+#### $R.progressBar.pushStep(id, amount)
+
+Used for adding of steps that should be processed to the progress instance.
+This method used in common with `doStep()` which used to notify that the step
+has been processed.
+
+As arguments receives an unique `id` identifier of the step and an optional
+`amount` of processes that should be processed.
+
+*For example:*
+
+```javascript
+var progress = (new $R.progressBar)
+             . pushStep("authentificate")
+             . pushStep("updateUserInfo", 5)
+;
+```
+
+#### $R.progressBar.doStep(id, amount)
+
+Used to notify that the step which was declared by `pushStep()` method has been
+processed.
+
+As arguments receives an unique `id` identifier of the step and an optional
+`amount` of processes that has been processed.
+
+*For example:*
+
+```javascript
+var progress = (new $R.progressBar)
+             . pushStep("authentificate")
+             . pushStep("updateUserInfo", 5)
+;
+
+setTimeout(function(){
+  progress
+    .doStep("authentificate")
+    .doStep("updateUserInfo", 2)
+  ;
+});
+```
+
+#### $R.progressBar.setStepCallback(fn)
+
+This method can be useful when you need to control steps execution.
+The function `fn` will be called every time when called `doStep()` or `pushStep()`
+function for the current instance of progress.
+
+To the `fn` function will be passed the following arguments:
+
+```javascript
+fn(operation, id, amount, summary, totalAmount, passedAmount)
+```
+
+| Name           | Type      | Description
+|----------------|-----------|--------------------------------------------------
+| `operation`    | *String*  | The type of operation (`push` or `do`).
+| `id`           | *String*  | An unique `id` identifier of step.
+| `amount`       | *Integer* | Currently passed as argument amount of steps.
+| `summary`      | *Object*  | An object that contains `total` and has been `passed` amount of steps for the instance of progress at the moment.
+| `totalAmount`  | *Integer* | Total amount of steps for the instance of progress at the moment.
+| `passedAmount` | *Integer* | Passed amount of steps for the instance of progress at the moment.
+
+#### $R.progressBar.setCompleteCallback(fn)
+
+This method can be useful if you need to control when the progress execution will
+be complete (all steps has been processed).
+
+*For example:*
+```javascript
+var progress = (new $R.progressBar)
+             . setCompleteCallback(function(){
+               alert("Done!");
+             })
+             . pushStep("authentificate")
+             . pushStep("updateUserInfo", 5)
+             . doStep("authentificate")
+             . doStep("updateUserInfo", 2)
+             . doStep("updateUserInfo") // 3
+             . doStep("updateUserInfo") // 4
+             . doStep("updateUserInfo") // 5
+;
+```
+
+#### $R.progressBar.destroy()
+
+The progress instance destructor. By default you should not to destroy an instance
+when finished because an instance of progress will be destroyed automatically
+(see [more](#rprogressbarautobool)).
+
+#### $R.progressBar.auto(bool)
+By default an instance of progress will be destroyed automatically when all steps
+has been processed and progress finished. But sometimes you need to do something
+more after the progress has been finished. In this case you can change
+autodestruction status to the one that you need.
+
+*For example:*
+```javascript
+var progress = (new $R.progressBar).auto(false);
+```
+
+#### $R.progressBar.isAuto()
+
+Returns current status of autodestruction.
+
+#### $R.progressBar.node
+
+This is a reference to the DOM node of current instance of progress.
+
+#### Progress Bar UI customisation
+
+By default, UI of progress is built into core to delivery of first picture as
+soon as possible. It makes some limitations as for UI customization, but anyway
+you can globally reload HTML markup and CSS stylesheets of progress.
+
+To reload UI of progress you just need to create the following directory your
+application instance with the following files inside:
+
+*for HTML:*
+```bash
+/sources/progressbar/index.html
+```
+
+*for CSS:*
+```bash
+/sources/progressbar/style.css
+```
+There you can write anything that you need.
 
 ### $R.bootProgress
-*TBD*
+
+This is an instance of `$R.progressBar` that has been created by core for the
+system usage.
+This instance used as a first picture that showing for the user while an
+application loading process is not finished yet.
+You can use this progress for anything that you need inside bootstrap process
+via `inc.js` file (see [more](#incjs)). For example it can be checking of
+authentication that requires an asynchronous API calls, loading of some
+dependencies or something else.
 
 ## Content delivery
 *TBD*
@@ -1399,6 +1601,7 @@ onBoot(function(){
 [image.1]: http://image.prntscr.com/image/b97b2b928a8c46e9a2ec91297a0d815d.png
 [image.2]: http://image.prntscr.com/image/36f21e387b464d1dbe5a5947c85bd9c4.png
 [image.3]: http://image.prntscr.com/image/6fc3203395fe4f6193c3884b9c4dc0ef.png
+[image.4]: http://image.prntscr.com/image/60a39b701f6b4773bf08221b0e635a7f.gif
 
 [cli.example.sh]: https://github.com/w3core/RockJS/blob/master/cli.example.sh
 [cli.example.bat]: https://github.com/w3core/RockJS/blob/master/cli.example.bat
