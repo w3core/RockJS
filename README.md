@@ -85,6 +85,13 @@ The next generation single-page application framework.
     - [Progress Bar UI customisation](#progress-bar-ui-customisation)
   - [$R.bootProgress](#rbootprogress)
 - [Content delivery](#content-delivery)
+  - [$R.xhr()](#rxhr)
+  - [$R.xhr(options)](#rxhroptions)
+  - [$R.xhr(url, options)](#rxhrurl-options)
+  - [$R.xhr(url, callback)](#rxhrurl-callback)
+  - [$R.inject(url, callback)](#rinjecturl-callback)
+  - [$R.include(type, url, callback, skipErrors)](#rincludetype-url-callback-skiperrors)
+  - [$R.include_once(type, url, callback, skipErrors)](#rinclude_oncetype-url-callback-skiperrors)
 - [Logging and Mobile debugging](#logging-and-mobile-debugging)
 
 
@@ -1157,7 +1164,7 @@ For getting template inside of module or layout can be used
 
 Also templates can be used for precaching  of any URL.
 In other words, you can put  content to the template and put his URL to the `id`
-attribute. Getting of content via [$R.xhr](#content-delivery) by this URL will
+attribute. Getting of content via [$R.xhr](#rxhr) by this URL will
 return content of this template instead of execution of AJAX HTTP request.
 
 *For example:*
@@ -1590,8 +1597,138 @@ via `inc.js` file (see [more](#incjs)). For example it can be checking of
 authentication that requires an asynchronous API calls, loading of some
 dependencies or something else.
 
+
 ## Content delivery
-*TBD*
+
+RockJS provides some of solutions to communicate with server which can be used
+for getting of content, loading of external scripts or stylesheets, extending of
+logic by injection to the anonymous namespace.
+
+### $R.xhr()
+
+Perform an asynchronous HTTP (Ajax) request.
+
+#### $R.xhr(options)
+
+`Object` **options** - A set of key/value pairs that configure the Ajax request.
+
+A complete list of all options is below. All options are optional and has default values.
+
+| Property                 | Type       | Default                             | Description                                                                                                                                                                         |
+|--------------------------|------------|-------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `url`                    | `String`   | `location.href`                     | A string containing the URL to which the request is sent.                                                                                                                           |
+| `type`                   | `String`   | `GET`                               | The HTTP method to use for the request (e.g. "POST", "GET", etc.).                                                                                                                  |
+| `data`                   | `Object`   | `{}`                                | Data to be sent to the server. Object must be Key/Value pairs. If value is an Array, RockJS serializes multiple values with same key based on the value of the traditional setting. |
+| `success(response,xhr)`  | `Function` | `null`                              | A function to be called if the request succeeds.                                                                                                                                    |
+| `complete(response,xhr)` | `Function` | `null`                              | A function to be called when the request finishes (after success and error callbacks are executed).                                                                                 |
+| `error(response,xhr)`    | `Function` | `null`                              | A function to be called if the request fails.                                                                                                                                       |
+| `contentType`            | `String`   | `application/x-www-form-urlencoded` | When sending data to the server, use this content type. Default is "application/x-www-form-urlencoded", which is fine for most cases.                                               |
+| `timeout`                | `Integer`  | `30000`                             | Set a timeout (in milliseconds) for the request.                                                                                                                                    |
+| `async`                  | `Boolean`  | `true`                              | By default, all requests are sent asynchronously (i.e. this is set to true by default). If you need synchronous requests, set this option to false.                                 |
+| `headers`                | `Object`   | `{}`                                | An object of additional header key/value pairs to send along with requests using the XMLHttpRequest transport.                                                                      |
+| `cache`                  | `Boolean`  | `true`                              | If set to false, it will force requested pages not to be cached by the browser.                                                                                                     |
+| `xRequestedWith`         | `String`   | `null`                              | Allows to define value for `X-Requested-With` HTTP header.                                                                                                                          |
+
+**Usage example:**
+
+```javascript
+$R.xhr({
+  url: "/path/to/something",
+  type: "POST",
+  data: {
+    email: "john@smith.com",
+    password: "********"
+  },
+  success: function (response) {
+    $R.page.get("dashboard").show();
+  },
+  error: function (response, xhr) {
+    $R.error("a:1", "Authentification error", xhr, response);
+  }
+});
+```
+
+#### $R.xhr(url, options)
+
+Allows to separate `url` parameter from `options` that can be useful to unify `options` object.
+
+**Usage example:**
+
+```javascript
+function getOptions() {
+  //...
+  return options;
+}
+
+$R.xhr("/path/to/something", getOptions());
+```
+
+#### $R.xhr(url, callback)
+Can be useful to create a simple GET request by easiest way.
+
+**Usage example:**
+
+```javascript
+$R.xhr("/ping?foo=bar", function(response, xhr){
+  // ... do something
+});
+```
+
+### $R.inject(url, callback)
+
+Performs injection of JavaScript logic into the global anonymous namespace.
+
+> It can be used **ONLY** for importing of internal components of application.
+> Because including of third-party libraries is potentially insecure way.
+> For using of third-party libraries should be used
+> [`$R.include`](#rincludetype-url-callback-skiperrors) or
+> [`$R.include_once`](#rinclude_oncetype-url-callback-skiperrors) functions.
+>
+> *So, be careful for using of this functionality.*
+
+**Usage Example:**
+
+```javascript
+// Body of "any.js" file
+$R.any = function() {
+  // ... do something
+};
+
+// Body of another one file that included to the application
+$R.inject("any.js", function(){
+  var anyResult = $R.any();
+});
+```
+
+
+### $R.include(type, url, callback, skipErrors)
+
+Performs including of any JavaScript or Stylesheet file into document.
+
+The function gets passed follow arguments:
+
+| Name         | Type       | Description
+|--------------|------------|------------
+| `type`       | `String`   | The type of requested resource (`js` or `css`).
+| `url`        | `String`   | A string containing the URL to the requested resource.
+| `callback`   | `Function` | A function to be called when the request finishes.
+| `skipErrors` | `Boolean`  | Default: `false`. Older mobile devices does not allows to handle `load` events for stylesheets. So, it can be useful for these cases.
+
+**Usage Example:**
+
+```javascript
+// Include jQuery library and dispatch event
+$R.include("js", "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js", function(){
+  $R.emit("jQuery.ready");
+});
+
+// Include Bootstrap library stylesheets and skip errors
+$R.include("css", "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css", null, true);
+```
+
+### $R.include_once(type, url, callback, skipErrors)
+
+Same as [`$R.include`](#rincludetype-url-callback-skiperrors) but performs preventing of double loading.
 
 ## Logging and Mobile debugging
 *TBD*
