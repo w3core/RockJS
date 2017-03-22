@@ -21,16 +21,16 @@ The next generation single-page application framework.
 - [Module manager](#module-manager)
   - [$R.module.make(id, name, options, callback)](#rmodulemakeid-name-options-callback)
     - [Component instance structure](#component-instance-structure)
-  - [$R.module.getById (id)](#rmodulegetbyid-id)
-  - [$R.module.getInstanceById (id, name, options, callback)](#rmodulegetinstancebyid-id-name-options-callback)
-  - [$R.module.getByName (name)](#rmodulegetbyname-name)
-  - [$R.module.all ()](#rmoduleall)
+  - [$R.module.getById(id)](#rmodulegetbyid-id)
+  - [$R.module.getInstanceById(id, name, options, callback)](#rmodulegetinstancebyid-id-name-options-callback)
+  - [$R.module.getByName(name)](#rmodulegetbyname-name)
+  - [$R.module.all()](#rmoduleall)
   - [$R.module.group()](#rmodulegroup)
     - [$R.module.group().push (module, DOMNode)](#rmodulegrouppush-module-domnode)
     - [$R.module.group().eject(module)](#rmodulegroupejectmodule)
-    - [$R.module.group().show (options)](#rmodulegroupshow-options)
-    - [$R.module.group().hide (options)](#rmodulegrouphide-options)
-    - [$R.module.group().request (options)](#rmodulegrouprequest-options)
+    - [$R.module.group().show(options)](#rmodulegroupshow-options)
+    - [$R.module.group().hide(options)](#rmodulegrouphide-options)
+    - [$R.module.group().request(options)](#rmodulegrouprequest-options)
 - [Layout](#layout)
 - [Page](#page)
   - [$R.page.make(name)](#rpagemakename)
@@ -690,7 +690,7 @@ The component (layouts and modules) instance provides the following properties a
 | `instance`                  | Object   | An internal environment (methods and properties) of instance.
 | `options`                   | Object   | An options of the component (see [$O](#o-object-structure)).
 
-### $R.module.getById (id)
+### $R.module.getById(id)
 Return an instance of module that was created with specified ID.
 
 > Considering to the fact that application has implementation of Lazy Loading
@@ -713,14 +713,14 @@ if (!userModuleInstance) {
 }
 ```
 
-### $R.module.getInstanceById (id, name, options, callback)
+### $R.module.getInstanceById(id, name, options, callback)
 Same as `$R.module.getById (id)` excluding the fact that the instance of the
 module will be created if not exists yet.
 
-### $R.module.getByName (name)
+### $R.module.getByName(name)
 Returns an array of all instances of module by name that already exists.
 
-### $R.module.all ()
+### $R.module.all()
 Returns an array of all instances of modules that has created in application
 at the moment.
 
@@ -731,7 +731,7 @@ This class allows to create a wrapper module to group any amount of module
 instances and control them at the same time.
 An instance of this class provides the following methods.
 
-#### $R.module.group().push (module, DOMNode)
+#### $R.module.group().push(module, DOMNode)
 This method allows to push an instance or array of instances of modules
 to the group. As optional, you can define the DOM node where an instance(s)
 should be injected.
@@ -739,15 +739,15 @@ should be injected.
 #### $R.module.group().eject(module)
 This method ejects any instance of module from group.
 
-#### $R.module.group().show (options)
+#### $R.module.group().show(options)
 This method turns on all instances of modules in group to show.
 As optional, you can to define any options that will be passed for showing.
 
-#### $R.module.group().hide (options)
+#### $R.module.group().hide(options)
 This method turns off all instances of modules in group by calling of `onHide` method.
 As optional, you can to define any options that will be passed for hiding.
 
-#### $R.module.group().request (options)
+#### $R.module.group().request(options)
 This method allows to call `onRequest` method for all instances of modules
 in group at same time.
 
