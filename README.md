@@ -93,6 +93,11 @@ The next generation single-page application framework.
   - [$R.include(type, url, callback, skipErrors)](#rincludetype-url-callback-skiperrors)
   - [$R.include_once(type, url, callback, skipErrors)](#rinclude_oncetype-url-callback-skiperrors)
 - [Logging and Mobile debugging](#logging-and-mobile-debugging)
+  - [$R.log(title, value)](#rlogtitle-value)
+  - [$R.error(code, message, target, dump)](#rerrorcode-message-target-dump)
+    - [$R.error.type(code)](#rerrortype-code)
+    - [$R.error.code(string)](#rerrorcode-string)
+  - [$R.errors()](#rerrors)
 
 
 ## Introduction
@@ -1700,7 +1705,6 @@ $R.inject("any.js", function(){
 });
 ```
 
-
 ### $R.include(type, url, callback, skipErrors)
 
 Performs including of any JavaScript or Stylesheet file into document.
@@ -1718,12 +1722,14 @@ The function gets passed follow arguments:
 
 ```javascript
 // Include jQuery library and dispatch event
-$R.include("js", "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js", function(){
+var script = "https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js";
+$R.include("js", script, function(){
   $R.emit("jQuery.ready");
 });
 
 // Include Bootstrap library stylesheets and skip errors
-$R.include("css", "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css", null, true);
+var style = "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css";
+$R.include("css", style, null, true);
 ```
 
 ### $R.include_once(type, url, callback, skipErrors)
@@ -1731,18 +1737,156 @@ $R.include("css", "https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.
 Same as [`$R.include`](#rincludetype-url-callback-skiperrors) but performs preventing of double loading.
 
 ## Logging and Mobile debugging
-*TBD*
 
+RockJS has own built-in features that allows easy code debugging and logging
+process.
 
+Debugging mode can be turned on/off by using of the `generic.debug.status`
+property in the `/js/config.js` file:
+
+```javascript
+/**
+ * Debug mode status.
+ * Define `false` to turn off debugging mode on `production`
+ * @type {Boolean}
+ */
+generic.debug.status = true;
+```
+
+Sometimes, when some bug occurs only on production (when debugging mode is
+turned off) and can not be reproduced in development mode, RockJS allows to
+understand what's wrong by using of special hot keys as for desktop and for
+mobile by using special tricks.
+
+Debugging mode can be switched although to the value of `generic.debug.status`
+in the `/js/config.js` file.
+
+Debugging mode can be switched by pressing at the same time of `Ctrl + Alt + Shift + F12`
+keys on desktop otherwise `20 touches till 5 seconds` in the application on
+mobile devices.
+
+RockJS log will be presented as a list of entry titles.
+Any entry can be expanded or collapsed by tapping to the title of entry.
+Tapping to the "minus" button that located in the top-right corner of any entry
+reveal to removing of entry from list.
+
+![RockJS application debugging][image.5]
+
+RockJS provides the following methods for working with log from the code side.
+
+### $R.log(title, value)
+
+Performs adding of entry to the RockJS log.
+
+The function gets passed two arguments:
+
+| Name    | Type                | Description
+|---------|---------------------|-----------------------------------------------
+| `title` | *Required* `String` | Log entry title
+| `value` | *Optional* `Mixed`  | Any value that will be human readable presented by RockJS
+
+**Usage Example:**
+
+```javascript
+function User (id) {
+  this.id = id;
+  this.update = update;
+
+  function update () {
+    //...
+  }
+}
+var instance = new User(123);
+
+$R.log("User instance", instance);
+```
+
+### $R.error(code, message, target, dump)
+
+Performs adding of error entry to the RockJS log.
+
+The function gets passed two arguments:
+
+| Name      | Type     | Description          |
+|-----------|----------|----------------------|
+| `code`    | `String` | Error code.          |
+| `message` | `String` | Error message.       |
+| `target`  | `Mixed`  | Error target object. |
+| `dump`    | `Mixed`  | Error dump object.   |
+
+In order to make error code, it is recommended using of `{type}:{code}` format,
+where `{type}` is a single char that indicates to the type of error and `{code}`
+is a code number of error. RockJS has some predefined types of error that can be
+useful but you able to use your own codes if you need.
+
+**Predefined types of error**
+
+| Type | Description |
+|------|------------ |
+| `c`  | Component   |
+| `a`  | Application |
+| `r`  | Core        |
+| `s`  | System      |
+
+**Usage Example:**
+
+```javascript
+// Error type: 'c' (component)
+// Error code: 0123
+// Error message: "Unexpected error"
+// Error target: this (instance of the component)
+$R.error("c:0123", "Unexpected error", this, {id: 12345, url: location.href});
+```
+
+#### $R.error.type(code)
+
+Allows to detect type of error by error code string.
+
+> Note that it's allows to detect only for predefined types aka. `c`omponent,
+> `a`pplication, `s`ystem and co`r`e
+
+**Usage Example**
+
+```javascript
+var error = "a:0123";
+
+var errorType = $R.error.type(error);
+// returns string "application"
+```
+
+#### $R.error.code(string)
+
+Allows to extract error code number from error code string.
+
+**Usage Example**
+
+```javascript
+var error = "a:0123";
+
+var errorCode = $R.error.code(error);
+// returns string "0123"
+```
+
+### $R.errors()
+
+Returns an object of errors by them types.
+
+```json
+{
+  "component": [...],
+  "application": [...],
+  "system": [...],
+  "core": [...]
+}
+```
 
 [image.1]: http://image.prntscr.com/image/b97b2b928a8c46e9a2ec91297a0d815d.png
 [image.2]: http://image.prntscr.com/image/36f21e387b464d1dbe5a5947c85bd9c4.png
 [image.3]: http://image.prntscr.com/image/6fc3203395fe4f6193c3884b9c4dc0ef.png
 [image.4]: http://image.prntscr.com/image/60a39b701f6b4773bf08221b0e635a7f.gif
+[image.5]: http://image.prntscr.com/image/9231600eaef14a5e8e90d61d7f56e974.png
 
 [cli.example.sh]: https://github.com/w3core/RockJS/blob/master/cli.example.sh
 [cli.example.bat]: https://github.com/w3core/RockJS/blob/master/cli.example.bat
 
 [1]: https://secure.php.net/manual/en/features.commandline.usage.php
-
-*to be continued...*
