@@ -95,8 +95,8 @@ The next generation single-page application framework.
 - [Logging and Mobile debugging](#logging-and-mobile-debugging)
   - [$R.log(title, value)](#rlogtitle-value)
   - [$R.error(code, message, target, dump)](#rerrorcode-message-target-dump)
-    - [$R.error.type(code)](#rerrortype-code)
-    - [$R.error.code(string)](#rerrorcode-string)
+    - [$R.error.type(code)](#rerrortypecode)
+    - [$R.error.code(string)](#rerrorcodestring)
   - [$R.errors()](#rerrors)
 
 
