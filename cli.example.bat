@@ -1,4 +1,5 @@
-:: Delete previous created directories
+:: Delete previously compiled production files and directories.
+:: Also you can use `-c` or `--clean` argument for deployment process instead of that.
 :: rmdir public /s /q
 
 :: Show help
@@ -14,4 +15,4 @@
 :: php ../rockjs/cli module ./source/modules/myModuleName
 
 :: Compile "source" application static bundle to "public" directory for deployment
-:: php.exe ../rockjs/cli deploy -s ./source -d ./public -m html,css,js
+:: php.exe ../rockjs/cli deploy -s ./source -d ./public -c -m html,css,js

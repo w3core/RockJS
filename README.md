@@ -195,7 +195,7 @@ process you can use command line interface (CLI).
    Returns something like that:
 
    ```bash
-   RockJS v3.0.0
+   RockJS v3.0.1
    =============
    Usage: php cli [command] <option> <value>
 
@@ -208,6 +208,7 @@ process you can use command line interface (CLI).
     deploy <option> <value>  Deploy an application
       -s, --source <path>       Path to the source codes directory otherwise current directory
       -d, --destination <path>  Path to the destination (deployment) directory
+      -c, --clean               Clean the destination directory before deploying
       -m, --minify <list>       Default: "html,js,css" Comma-separated list of file types to be minified otherwise "none"
    ```
 
@@ -379,7 +380,7 @@ at least one `layout`.
 
 6. Build your application from console to any empty directory:
    ```bash
-   $ php rockjs/cli deploy -s ./projects/awesome -d ./httpserver/public/awesome
+   $ php rockjs/cli deploy -s ./projects/awesome -d ./httpserver/public/awesome --clean
    ```
 
    That's all. Your `awesome` application has been compiled to the static

@@ -1,7 +1,7 @@
 <?php include "minify.class.php";
 
 class R {
-  const VERSION = "3.0.0";
+  const VERSION = "3.0.1";
 
   const COMPILE_FILES = "txt, md, html, htm, xml, css, less, sass, scss, styl, js, json, ts, coffee";
 
@@ -27,6 +27,19 @@ class R {
       exit($class::$method($args));
     }
     exit(self::help());
+  }
+
+  private static function rrmdir ($src, $cleanOnly=false) {
+    $dir = opendir($src);
+    while(false !== ( $file = readdir($dir)) ) {
+      if (( $file != '.' ) && ( $file != '..' )) {
+        $full = $src . '/' . $file;
+        if ( is_dir($full) ) self::rrmdir($full);
+        else unlink($full);
+      }
+    }
+    closedir($dir);
+    if (!$cleanOnly) rmdir($src);
   }
 
   private static function copySource ($source, $destination="") {
@@ -102,6 +115,7 @@ class R {
   public static function CLI_deploy ($argv) {
     $source = realpath(self::resolveArgument($argv, "s", "source", false, getcwd()));
     $destination = self::resolveArgument($argv, "d", "destination", true);
+    $clean = self::resolveArgument($argv, "c", "clean", false);
     $minify = strtolower(self::resolveArgument($argv, "m", "minify", false, "html,js,css"));
 
     $minify = ($minify == "none") ? array() : preg_split("/[^a-z0-9]+/", $minify);
@@ -111,6 +125,7 @@ class R {
     else if (strpos(realpath(dirname($destination)), $source) !== false) $error = "The component cannot to be created here (".realpath(dirname($destination)).")";
 
     if (!$error) {
+      if ($clean && is_dir($destination)) self::rrmdir($destination, true);
       self::copySource($source, $destination);
 
       self::$_SOURCE_DIRECTORY = $source;
@@ -137,6 +152,7 @@ Available commands:
   deploy <option> <value>  Deploy an application
     -s, --source <path>       Path to the source codes directory otherwise current directory
     -d, --destination <path>  Path to the destination (deployment) directory
+    -c, --clean               Clean the destination directory before deploying
     -m, --minify <list>       Default: \"html,js,css\" Comma-separated list of file types to be minified otherwise \"none\"
 
 ";
