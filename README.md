@@ -9,6 +9,7 @@ The next generation single-page application framework.
 - [Installation](#installation)
 - [Quick Start Guide](#quick-start-guide)
   - [CLI](#cli)
+  - [Project configuration](#project-configuration)
   - [Hello World!](#hello-world)
 - [Events system](#events-system)
   - [Event body](#event-body)
@@ -243,6 +244,48 @@ process you can use command line interface (CLI).
 
 > An example of usage you can find in [cli.example.sh][cli.example.sh]
 > (for macOS/OS X and Linux) and [cli.example.bat][cli.example.bat] for Windows.
+
+### Project configuration
+
+A most of popular IDEs allows to configure project building process.
+It allows to be ease for development process by using of RockJS CLI for deployment.
+Eclipse is one of the most popular IDE for Web.
+So, it will be taken as example.
+
+1. Create new or open existing `JavaScript Project`
+
+   ![Create new project][image.6]
+
+2. Enter project name and select what one of you need - create new project or
+   create project from existing source:
+
+   ![Create new project][image.7]
+
+3. Open project menu and create new builder by the following menu path
+   `Project > Properties > Builders > New > Program`.
+
+   In the opening dialog fill the following fileds:
+
+   * `Name` - the name of builder eg: "Build application"
+   * `Main > Location` - here you should enter path to PHP in your filesystem
+   * `Main > Working Directory` - in most of cases it can be predefined Eclipse variable `${project_loc}`
+   * `Main > Arguments` - the command to deploy project by using [RockJS CLI](#cli).
+
+     As you can see on the picture, an instance of RockJS application placed in the `/source` directory of project.
+     The application will be compiled into the `/public` directory.
+     All HTML, CSS and JS files will be optimized and compressed.
+
+     ![Create new project][image.8]
+
+   * Open `Refresh` tab and set checkbox [x] Refresh resources upon completition
+
+     ![Create new project][image.9]
+
+   * Press to the `OK` button in the right bottom conner of dialog to save your builder.
+
+4. When your builder has been created, you can build your project by calling of
+   the following project menu command - `Project > Build Project`
+
 
 ### Hello World!
 
@@ -1886,6 +1929,11 @@ Returns an object of errors by them types.
 [image.3]: http://image.prntscr.com/image/6fc3203395fe4f6193c3884b9c4dc0ef.png
 [image.4]: http://image.prntscr.com/image/60a39b701f6b4773bf08221b0e635a7f.gif
 [image.5]: http://image.prntscr.com/image/9231600eaef14a5e8e90d61d7f56e974.png
+
+[image.6]: http://image.prntscr.com/image/6f3d0a5708c24a97a94bb08074878225.png
+[image.7]: http://image.prntscr.com/image/1018898834df433bb497ec8bb52247cc.png
+[image.8]: http://image.prntscr.com/image/cb6e3197157a475f950be2288b0e595e.png
+[image.9]: http://image.prntscr.com/image/605bb21de95142cebec8507cf17777dc.png
 
 [cli.example.sh]: https://github.com/w3core/RockJS/blob/master/cli.example.sh
 [cli.example.bat]: https://github.com/w3core/RockJS/blob/master/cli.example.bat
