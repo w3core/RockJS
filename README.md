@@ -1,6 +1,6 @@
 # RockJS
 
-The next generation single-page application framework.
+The trusty framework for old school guys!
 
 ## Table of contents
 - [Introduction](#introduction)
@@ -103,8 +103,8 @@ The next generation single-page application framework.
 
 ## Introduction
 
-RockJS is a minimalistic, high-performance and intuitive SPA framework that
-allows quickly create a powerful Desktop, Android or iOS native-like
+RockJS is a minimalistic, high-performance and intuitive single-page application
+framework that allows quickly create a powerful Desktop, Android or iOS native-like
 applications with a big amount of UI components.
 
 This framework contains only those features that really needed.
