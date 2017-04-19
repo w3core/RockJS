@@ -62,7 +62,7 @@ The trusty framework for old school guys!
   - [componentLoad event](#componentload-event)
   - [titleChange event](#titlechange-event)
   - [bootComplete event](#bootcomplete-event)
-  - [execPageShow event](#execpageshow-event)
+  - [resolvePageShow event](#resolvepageshow-event)
   - [error event](#error-event)
   - [initConfig event](#initconfig-event)
   - [initCOM event](#initcom-event)
@@ -140,6 +140,7 @@ Basically, the page creation is based on the following structure:
 * Pages (simple definition what should be used: name, route, layout, modules with their location in layout);
 
 Visually it can be shown as follow:
+
 ![RockJS Structure][image.3]
 
 
@@ -1263,6 +1264,8 @@ should be shown.
 An event `data` property contains an options that was applied to show component.
 The `target` property contains the reference to the
 [component instance](#component-instance-structure).
+This event can be used for preventing of showing the component when handler returns 
+`false` or by using of `preventDefault()` event method.
 
 
 ### `componentHide` event
@@ -1318,9 +1321,9 @@ The `bootComplete` [event](#event-body) occurs at once when the application core
 with all dependencies has been loaded and completely ready for showing content.
 
 
-### `execPageShow` event
+### `resolvePageShow` event
 
-The `execPageShow` [event](#event-body) occurs when any page should be shown.
+The `resolvePageShow` [event](#event-body) occurs when any page is required to be shown.
 This event unlike the `pageShow` event can be used for preventing of showing
 the page by using of `preventDefault()` event method.
 

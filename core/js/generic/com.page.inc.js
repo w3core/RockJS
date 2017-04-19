@@ -72,7 +72,9 @@
      if ($R.config.client.purl == true)
       {
        $R.addEventListener('execPageShow:ready', function (e) {
-        if (e.returnValue == true && e.target == that) execShow(e.data);
+         resolveShow(e.data, function(status){
+           if (status && e.returnValue == true && e.target == that) execShow(e.data);
+         });
        });
       }
     }
@@ -352,10 +354,22 @@
      });
     }
 
+   function resolveShow (o, callback) {
+     if (typeof callback == FUNCTION) {
+       $R.dispatchEvent('resolvePageShow', o, that, null, null, function(e){
+         callback(!!e.returnValue);
+       });
+     }
+   }
+
    function show (o)
     {
-     if ($R.config.client.purl == true) location.hash = URL(that.name, o);
-     else execShow(o);
+     resolveShow(o, function(status){
+       if (status) {
+         if ($R.config.client.purl == true) location.hash = URL(that.name, o);
+         else execShow(o);
+       }
+     });
      return that;
     }
 

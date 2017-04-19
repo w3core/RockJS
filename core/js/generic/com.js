@@ -337,18 +337,21 @@ function Component (type, name, options, callback, id, onBeforeCreate)
 
   function show (o, p)
    {
-    IS_VISIBLE = true;
-    $R.dispatchEvent('componentShow', opts(o), that);
-    if (that.instance == null) visibilityOnComponentCreate = ['show', opts(o), opts(p)];
-    else
-     {
-      attachStyleSheet();
-      if (typeof that.instance.onShow == FUNCTION)
-       {
-        that.instance.onShow(opts(o), opts(p));
-       }
-     }
-    $R.tools.removeClass(that.options.DOM, 'hidden');
+    $R.dispatchEvent('componentShow', opts(o), that, null, null, function (e) {
+      IS_VISIBLE = e.returnValue;
+      if (IS_VISIBLE) {
+        if (!that.instance) visibilityOnComponentCreate = ['show', opts(o), opts(p)];
+        else
+         {
+          attachStyleSheet();
+          if (typeof that.instance.onShow == FUNCTION)
+           {
+            that.instance.onShow(opts(o), opts(p));
+           }
+         }
+        $R.tools.removeClass(that.options.DOM, 'hidden');
+      }
+    });
     return that;
    };
 
