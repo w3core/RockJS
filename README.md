@@ -711,8 +711,8 @@ logic will be available.
 | `callback` | *optional* Function | The function that should be called when instance of the module will be created.
 
 *For example:*
-```javascript
 
+```javascript
 var articleModule = $R.module.make(null, "article", {id: 12345}, function (article){
   console.log(article);
   // You can call any internal method of the module
@@ -989,6 +989,7 @@ returns reference to this instance.
 | get()                                              | Returns a definition object at the moment.
 | exec()                                             | Creates and puts just created [instance](#page-instance-structure) of page in the pages collection.
 
+
 *Usage example:*
 
 ```javascript
@@ -1234,7 +1235,7 @@ $R.xhr("https://google.com/", function(response){
 ## System Events
 
 
-### `pageShow` event
+### pageShow event
 
 The `pageShow` [event](#event-body) occurs when any page should be shown.
 An event `data` property contains an options that was applied to show the page.
@@ -1242,7 +1243,7 @@ The `target` property contains the reference to the
 [page instance](#page-instance-structure).
 
 
-### `pageHide` event
+### pageHide event
 
 The `pageHide` [event](#event-body) occurs when any page should be hidden.
 An event `data` property contains an options that was applied to hide the page.
@@ -1250,25 +1251,25 @@ The `target` property contains the reference to the
 [page instance](#page-instance-structure).
 
 
-### `pageCreate` event
+### pageCreate event
 
 The `pageCreate` [event](#event-body) occurs when the new instance of any page
 has been created. The `target` of `pageCreate` event contains an
 [instance](#page-instance-structure) of just created page.
 
 
-### `componentShow` event
+### componentShow event
 
 The `componentShow` [event](#event-body) occurs when any module or layout
 should be shown.
 An event `data` property contains an options that was applied to show component.
 The `target` property contains the reference to the
 [component instance](#component-instance-structure).
-This event can be used for preventing of showing the component when handler returns 
+This event can be used for preventing of showing the component when handler returns
 `false` or by using of `preventDefault()` event method.
 
 
-### `componentHide` event
+### componentHide event
 
 The `componentHide` [event](#event-body) occurs when any module or layout
 should be hidden.
@@ -1277,7 +1278,7 @@ The `target` property contains the reference to the
 [component instance](#component-instance-structure).
 
 
-### `componentRequest` event
+### componentRequest event
 
 The `componentRequest` [event](#event-body) occurs when any component was
 requested from an outside.
@@ -1286,14 +1287,14 @@ The `target` property contains the reference to the
 [component instance](#component-instance-structure).
 
 
-### `componentCreate` event
+### componentCreate event
 
 The `componentCreate` [event](#event-body) occurs when the new instance of any
 component has been created. The `target` of `componentCreate` event contains an
 [instance](#component-instance-structure) of just created component.
 
 
-### `componentLoad` event
+### componentLoad event
 
 The `componentLoad` [event](#event-body) occurs before `componentCreate` event
 when the component and all dependencies of this component has been loaded.
@@ -1306,7 +1307,7 @@ Event `data` property contains the following properties:
 | `body` | *Function* | Constructor of [component](#module).
 
 
-### `titleChange` event
+### titleChange event
 
 The `titleChange` [event](#event-body) occurs when the title of page has been
 changed by some reason.
@@ -1315,13 +1316,13 @@ The `target` property contains the reference to the
 [page instance](#page-instance-structure).
 
 
-### `bootComplete` event
+### bootComplete event
 
 The `bootComplete` [event](#event-body) occurs at once when the application core
 with all dependencies has been loaded and completely ready for showing content.
 
 
-### `resolvePageShow` event
+### resolvePageShow event
 
 The `resolvePageShow` [event](#event-body) occurs when any page is required to be shown.
 This event unlike the `pageShow` event can be used for preventing of showing
@@ -1335,7 +1336,7 @@ The `target` property contains the reference to the
 [page instance](#page-instance-structure).
 
 
-### `error` event
+### error event
 
 The `error` [event](#event-body) occurs when error occurred ([see more](#logging-and-mobile-debugging)).
 An event `data` property contains stack trace information or any custom dump to
@@ -1343,19 +1344,19 @@ understand the reason of error.
 The `target` property contains the reference to the logic that throws an error.
 
 
-### `initConfig` event
+### initConfig event
 
 The `initConfig` [event](#event-body) occurs when application configuration
 has been loaded.
 
 
-### `initCOM` event
+### initCOM event
 
 The `initCOM` [event](#event-body) occurs when components management logic has
 been loaded and ready.
 
 
-### `initCOMMap` event
+### initCOMMap event
 
 The `initCOMMap` [event](#event-body) occurs when the [`map.js` file](#mapjs)
 has been loaded and evaluated and [pages definition](#rpagedefinename) process
@@ -1578,6 +1579,7 @@ This method can be useful if you need to control when the progress execution wil
 be complete (all steps has been processed).
 
 *For example:*
+
 ```javascript
 var progress = (new $R.progressBar)
              . setCompleteCallback(function(){
@@ -1606,6 +1608,7 @@ more after the progress has been finished. In this case you can change
 autodestruction status to the one that you need.
 
 *For example:*
+
 ```javascript
 var progress = (new $R.progressBar).auto(false);
 ```
@@ -1628,11 +1631,13 @@ To reload UI of progress you just need to create the following directory your
 application instance with the following files inside:
 
 *for HTML:*
+
 ```bash
 /sources/progressbar/index.html
 ```
 
 *for CSS:*
+
 ```bash
 /sources/progressbar/style.css
 ```

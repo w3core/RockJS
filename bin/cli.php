@@ -1,7 +1,7 @@
 <?php include "minify.class.php";
 
 class R {
-  const VERSION = "3.0.1";
+  const VERSION = "3.0.2";
 
   const COMPILE_FILES = "txt, md, html, htm, xml, css, less, sass, scss, styl, js, json, ts, coffee";
 

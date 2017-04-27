@@ -118,11 +118,7 @@
    var o = null, a = arguments;
    if (a[0] != null && typeof a[0] == OBJECT) o = a[0]; // (o)
    else if (a[1] != null && typeof a[1] == OBJECT) o = a[1]; // (url, o)
-   else if (typeof a[0] == FUNCTION || typeof a[1] == FUNCTION) // (callback) || (url, callback)
-    {
-     o = {};
-     o.complete = a[0] || a[1];
-    }
+   else if (typeof a[0] == STRING && typeof a[1] == FUNCTION) o = {url:a[0], complete:a[1]}; // (url, callback)
    if (o == null) return false;
 
    var q = {};

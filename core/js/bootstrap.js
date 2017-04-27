@@ -1,6 +1,8 @@
 (new function $R (window, document, location, Array, Number, String) {
  var $R = this;
 
+ $R.value = function (value) {return value;};
+
  $R.config = function(){return /*[include src="js/config.js" default="{generic:{}, client:{}}"]*/;}();
 
  var DEBUG = ($R.config.generic.debug && $R.config.generic.debug.status);
