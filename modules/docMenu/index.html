@@ -1,0 +1,1 @@
+<ol><%for (var i in this.children){%><li <%this.active(this.children[i])?'class="active"':''%>><a href="<%this.children[i].anchor%>"><%this.children[i].title%></a><%if(this.children[i].children) {%><%this.compile(this.children[i].children)%><%}%></li><%}%></ol>

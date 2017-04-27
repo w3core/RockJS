@@ -1,0 +1,2 @@
+(new function(e){function n(e,i){var u=/<%([^%>]+)?%>/g,a=/(^( )?(if|for|else|switch|case|break|{|}))(.*)?/g,r='var r=[];\n',t=0,n,c=function(e,n){n?(r+=e.match(a)?e+'\n':'r.push('+e+');\n'):(r+=e!=''?'r.push("'+e.replace(/"/g,'\\"')+'");\n':'');return c}
+while(n=u.exec(e)){c(e.slice(t,n.index))(n[1],!0);t=n.index+n[0].length};c(e.substr(t,e.length-t));r+='return r.join("");';return new Function(r.replace(/[\r\t\n]/g,'')).apply(i)};e.template=n}($R));
