@@ -2,7 +2,7 @@
   "name": "RockJS Framework",
   "short_name": "RockJS",
   "description": "The trusty framework for old school guys!",
-  "start_url": "/#/doc/",
+  "start_url": "/RockJS/#/doc/",
   "display": "fullscreen",
   "orientation": "portrait",
   "background_color": "#282c34"
