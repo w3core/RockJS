@@ -18,13 +18,22 @@ class minify {
   public static function html ($string="", $and=array("js", "css")) {
     $assets = array();
     if (!is_array($and)) $and = array();
-    $string = preg_replace_callback("/(<(script|style)\b[^>]*>)([\s\S]*)(<\/\\2>)/i",
+    $string = preg_replace_callback("/(<(script|style)\b[^>]*>)([\s\S]*?)(<\/\\2>)/i",
       function ($m) use (&$assets) {
-        $type = strtolower($m[2]);
-        $type = $type == "script" ? "js" : ($type == "style" ? "css" : "unknown");
-        $id = count($assets);
-        $assets[$id] = $m;
         $class = __CLASS__;
+        $attrs = $class::parseAttributes($m[1]);
+        $type = "unknown";
+        if (
+          strtolower($m[2]) == "script" &&
+          (!isset($attrs["type"]) || strtolower($attrs["type"]) == "text/javascript")
+        ) $type = "js";
+        elseif (
+          strtolower($m[2]) == "style" &&
+          (!isset($attrs["type"]) || strtolower($attrs["type"]) == "text/css")
+        ) $type = "css";
+        $id = count($assets);
+        array_push($m, $type);
+        $assets[$id] = $m;
         return $class::mask($type, $id);
       },
       $string
@@ -46,9 +55,7 @@ class minify {
     );
 
     foreach($assets as $id=>$asset) {
-      list($tag, $open, $type, $value, $close) = $asset;
-      $type = strtolower($type);
-      $method = $type == "script" ? "js" : ($type == "style" ? "css" : "unknown");
+      list($tag, $open, $tagName, $value, $close, $method) = $asset;
       $v = $open.trim($value).$close;
       if (in_array($method, $and) && method_exists(__CLASS__, $method)) $v = $open.self::$method($value).$close;
       $string = str_replace(self::mask($method, $id), $v, $string);
@@ -140,4 +147,18 @@ class minify {
     return trim($string);
   }
 
+  private static function parseAttributes ($tag="") {
+    $attributes = array();
+    if (preg_match("/<([a-z0-9-_:]+)([^>]*)>/i", $tag, $m)) {
+      $tagName = strtolower($m[1]);
+      $attrsString = $m[2];
+      preg_match_all("/([a-z0-9-_:]+)(\s*=\s*([\"']?)(.+?)[\"']?)?\s+?/mi", " $attrsString ", $attrs);
+      if ($attrs && !empty($attrs[1])) {
+        foreach ($attrs[1] as $index=>$name) {
+          $attributes[strtolower($name)] = !empty($attrs[4][$index]) ? $attrs[4][$index] : true;
+        }
+      }
+    }
+    return $attributes;
+  }
 }
