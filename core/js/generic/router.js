@@ -6,7 +6,7 @@
    if (!$R.config.client.purl) return;
    var page, url = location.hash.substring(1), si = url.indexOf('?'), pages = $R.page.defined(),
        path = si >= 0 ? url.substr(0, si) : url,
-       qs = si >= 0 ? tools.normalize(tools.parseQueryString(url.substr(si+1, url.length))) : {}
+       qs = si >= 0 ? tools.parseQueryString(url.substr(si+1, url.length)) : {}
    ;
    if (path[path.length-1] == '/') path = path.substr(0, path.length-1);
    for (var i in pages) {

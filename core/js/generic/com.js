@@ -106,7 +106,7 @@ function Component (type, name, options, callback, id, onBeforeCreate)
 
   function opts (o)
    {
-    return (o == null) ? {} : $R.tools.normalize(o);
+    return (o == null) ? {} : o;
    }  
 
   function extractNodes (dom, def) {

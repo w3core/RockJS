@@ -340,7 +340,7 @@
     {
      if (CurrentPage != null && CurrentPage.name != name) CurrentPage.hide();
      CurrentPage = that;
-     that.options.show = o ? $R.tools.normalize(o) : null;
+     that.options.show = o ? o : null;
 
      IS_VISIBLE = true;
      showTitle();
@@ -375,7 +375,7 @@
 
    function execHide (o)
     {
-     that.options.hide = o ? $R.tools.normalize(o) : null;
+     that.options.hide = o ? o : null;
      IS_VISIBLE = false;
      if (IS_READY) doPageHide();
      else Progress.hide();
