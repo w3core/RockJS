@@ -1,9 +1,8 @@
 {
-  "name": "RockJS Framework",
-  "short_name": "RockJS",
+  "name": "RockJS Documentation",
+  "short_name": "RockJS Documentation",
   "description": "The trusty framework for old school guys!",
+  "display": "standalone",
   "start_url": "/RockJS/#/doc/",
-  "display": "fullscreen",
-  "orientation": "portrait",
   "background_color": "#282c34"
 }
