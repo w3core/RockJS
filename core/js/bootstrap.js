@@ -14,6 +14,8 @@
 
  var NUMBER = 'number', STRING = 'string', OBJECT = 'object', FUNCTION = 'function', UNDEFINED = 'undefined', BOOLEAN = 'boolean'; // For typeof checking
 
+ /*[include src="generic/template.js"]*/
+
  var makeCSSNodeByString = function(str)
   {
    var o = document.createElement("style");
