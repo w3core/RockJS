@@ -32,12 +32,12 @@
 
  function initBootstrapStyles ()
   {
-   var node;
+   var node, head = document.querySelector('head');
    node = makeCSSNodeByString(/*[include src="core/css/bootstrap.css" format="STRING"]*/);
-   document.querySelector('head').appendChild(node);
+   head.appendChild(node);
 
    node = makeCSSNodeByString(progressBarMarkup.css);
-   document.querySelector('head').appendChild(node);
+   head.appendChild(node);
   }
  initBootstrapStyles();
 

@@ -1,0 +1,1 @@
+php d:/www/rockjs/cli %*

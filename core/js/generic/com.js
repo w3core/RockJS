@@ -284,7 +284,7 @@ function Component (type, name, options, callback, id, onBeforeCreate)
   function attachStyleSheet ()
    {
     if (that.options.stylesheet == null) return;
-    document.body.appendChild(that.options.stylesheet);
+    document.querySelector('head').appendChild(that.options.stylesheet);
    }
 
   function detachStyleSheet ()
