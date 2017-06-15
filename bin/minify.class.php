@@ -109,7 +109,7 @@ class minify {
         "/(\[)([^\"' \]]+)([\"'])([^\"' \]]+)(\\3)(\])/",
         "/ (\!important)/",
         "/\:(\:before|\:after)/",
-        "/ ?([\(\)\{\}\:\;\,]) /",
+        "/([\{\}\:\;\,]) /",
         "/(margin|padding|border-width|border-color|border-style)\:([0-9a-z\.\-\%]+)(\s+\\2)*([!;}])/i",
         "/(margin|padding|border-width|border-color|border-style)\:([0-9a-z\.\-\%]+)(\s+[0-9a-z\.\-\%]+)(\s+\\2)(\\3)*([!;}])/i"
       ),
@@ -129,7 +129,7 @@ class minify {
         '$1$2$4$6',
         '$1',
         '$1',
-        '$1 ',
+        '$1',
         '$1:$2$4',
         '$1:$2$3$6'
       ),
@@ -138,10 +138,10 @@ class minify {
     $string = preg_replace_callback('/\:\s*calc\(([^;}]+)/', function ($m) {
       return preg_replace(array('/\s+/', '/([-+*\/]+)/'), array('', ' $1 '), $m[0]);
     }, $string);
-    $string = preg_replace_callback('/(.)(rgba?|hsla?)\s*\(\s*(\d+)[, %]+(\d+)[, %]+(\d+)[, %]*([01]?)\s*\)(.)/', function ($m) {
-      if ($m[6] === '0') return $m[1].'transparent'.$m[7];
+    $string = preg_replace_callback('/(.)(rgba?|hsla?)\s*\(\s*(\d+)[, %]+(\d+)[, %]+(\d+)[, %]*([01]?)\s*\)/', function ($m) {
+      if ($m[6] === '0') return $m[1].'transparent';
       $type = str_replace('a', '', strtolower($m[2]));
-      return $m[1].($type == 'hsl' ? self::hsl2hex($m[3]*1, $m[4]*1, $m[5]*1) : self::rgb2hex($m[3]*1, $m[4]*1, $m[5]*1)).$m[7];
+      return $m[1].($type == 'hsl' ? self::hsl2hex($m[3]*1, $m[4]*1, $m[5]*1) : self::rgb2hex($m[3]*1, $m[4]*1, $m[5]*1));
     }, $string);
     $string = preg_replace("/([,: \(]#)([0-9a-f])\\2([0-9a-f])\\3([0-9a-f])\\4/i", '$1$2$3$4', $string);
     return trim($string);
