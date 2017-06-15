@@ -3,6 +3,6 @@
   "short_name": "RockJS Documentation",
   "description": "The trusty framework for old school guys!",
   "display": "standalone",
-  "start_url": "/RockJS/#/doc/",
+  "start_url": "/RockJS/",
   "background_color": "#282c34"
 }
