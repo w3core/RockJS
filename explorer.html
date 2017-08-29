@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+  <head>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, minimum-scale=1, maximum-scale=1" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="msapplication-navbutton-color" content="#4285f4" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="theme-color" content="#4285f4" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <title>DOM Explorer</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,==" />
+    <style>
+      form {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        position: fixed;
+        width: 100%;
+        padding: .25em;
+        box-sizing: border-box;
+        background: rgba(200,200,200,.9);
+        box-shadow: 0 0 0.5em;
+      }
+      form > * {
+        flex-grow: 0;
+        flex-shrink: 0;
+      }
+      #q {
+        flex-grow: 1;
+        flex-shrink: 1;
+      }
+      body {font-family: monospace; padding: 0; margin: 0;}
+      .result {padding-top: 2em;}
+      table {width: 100%;}
+      td {padding: .25em; vertical-align: top;}
+      tr:nth-child(odd) {background: #eee;}
+    </style>
+    <script>
+      function getObjectPropertyByPath (path, object) {
+        if (object && typeof object == 'object' && path && typeof path == 'string' && /^[a-z0-9.-_$]+$/ig.test(path)) {
+          var path = '["' + path.replace(/\./g, '"]["') + '"]';
+          return (new Function('try{return this'+path+'}catch(e){return}')).call(object);
+        }
+      }
+
+      function makeContent (path) {
+        var obj = getObjectPropertyByPath(path, window);
+        var html = '<table><tr><td><b>TYPE</b></td><td><b>NAME</b></td><td><b>VALUE</b></td></tr>';
+        if (obj && typeof obj == 'object') {
+          for (var i in obj) {
+            html += '<tr><td><i>(' + typeof obj[i] + ')</i></td><td>' + i + '</td>' + '<td><b>' + obj[i] + '</b></td>' + '</tr>';
+          }
+        }
+        html += '</table>';
+        return html;
+      }
+      
+      function onSubmit () {
+        document.querySelector('.result').innerHTML = makeContent(document.getElementById('q').value);
+      }
+    </script>
+  </head>
+  <body>
+    <form action="javascript:void(0)" onsubmit="onSubmit()">
+      <label for="q">window.</label>
+      <input id="q" type="text" value="navigator" />
+      <input type="submit" />
+    </form>
+    <div class="result"></div>
+    <script>onSubmit();</script>
+  </body>
+</html>
