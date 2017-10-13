@@ -216,7 +216,7 @@
      }
     try{xhr.open(q.type, url, q.async);}
     catch(e){onError(e, execCallbacks);};
-    xhr.timeout = q.timeout;
+    if (q.async) xhr.timeout = q.timeout;
     if (q.contentType != null) xhr.setRequestHeader('Content-type', q.contentType);
     if (q.xRequestedWith != null) xhr.setRequestHeader('X-Requested-With', q.xRequestedWith);
     for (var i in q.headers) xhr.setRequestHeader(String(i), String(q.headers[i]));
